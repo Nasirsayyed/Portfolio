@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Nasirahmed Sayyed | Full Stack .NET Developer</title>
+    <meta
+      name="description"
+      content="Nasirahmed Sayyed — Full Stack .NET Developer with 4+ years building React.js and .NET Core SaaS products, enterprise dashboards, and data visualization platforms."
+    />
+    <meta name="author" content="Nasirahmed Sayyed" />
+    <meta name="theme-color" content="#2563eb" />
+    <link rel="canonical" href="https://nasirsayyed.dev/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Nasirahmed Sayyed | Full Stack .NET Developer" />
+    <meta
+      property="og:description"
+      content="Full Stack .NET Developer with 4+ years building React.js and .NET Core SaaS products, enterprise dashboards, and data visualization platforms."
+    />
+    <meta property="og:url" content="https://nasirsayyed.dev/" />
+    <meta property="og:site_name" content="Nasirahmed Sayyed" />
+    <meta property="og:image" content="/og-image.svg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nasirahmed Sayyed | Full Stack .NET Developer" />
+    <meta
+      name="twitter:description"
+      content="Full Stack .NET Developer with 4+ years building React.js and .NET Core SaaS products, enterprise dashboards, and data visualization platforms."
+    />
+    <meta name="twitter:image" content="/og-image.svg" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Nasirahmed Sayyed",
+        "jobTitle": "Full Stack .NET Developer",
+        "url": "https://nasirsayyed.dev/",
+        "email": "mailto:nasirsayyed84@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Sangli",
+          "addressRegion": "Maharashtra",
+          "addressCountry": "IN"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/nasirahmed-sayyed",
+          "https://github.com/nasirsayyed/",
+          "https://www.hackerrank.com/nasirsayyed84"
+        ],
+        "knowsAbout": ["C#", ".NET Core", "React.js", "SQL Server", "Microservices", "REST API"]
+      }
+    </script>
+
+    <script>
+      (function () {
+        try {
+          var darkBg = {
+            ocean: '#070c17',
+            royal: '#0b0817',
+            emerald: '#061412',
+            sunset: '#150907',
+            monochrome: '#0a0a0b',
+            cyber: '#05050a',
+          };
+          var darkFg = {
+            ocean: '#e8edf7',
+            royal: '#ece9f9',
+            emerald: '#e4f5ee',
+            sunset: '#fbe9e1',
+            monochrome: '#f4f4f5',
+            cyber: '#e9e8fb',
+          };
+          var raw = localStorage.getItem('portfolio-theme');
+          var state = raw ? JSON.parse(raw).state : null;
+          var appearance = (state && state.appearance) || 'system';
+          var preset = (state && state.preset) || 'ocean';
+          var isDark =
+            appearance === 'dark' ||
+            (appearance === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.setProperty('--background', darkBg[preset] || darkBg.ocean);
+            document.documentElement.style.setProperty('--foreground', darkFg[preset] || darkFg.ocean);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
