@@ -21,10 +21,12 @@ export function RecruiterModeToggle() {
       <Briefcase className="h-3.5 w-3.5" aria-hidden="true" />
       Recruiter Mode
       <span
-        className={`relative h-4 w-7 rounded-full transition-colors ${recruiterMode ? 'bg-primary' : 'bg-border'}`}
+        className={`relative h-4 w-7 rounded-full transition-colors ${
+          recruiterMode ? 'bg-primary' : 'bg-muted-foreground/40'
+        }`}
       >
         <span
-          className={`absolute left-0.5 top-0.5 h-3 w-3 rounded-full bg-white transition-transform ${
+          className={`absolute left-0.5 top-0.5 h-3 w-3 rounded-full bg-white shadow-sm ring-1 ring-black/10 transition-transform ${
             recruiterMode ? 'translate-x-3' : 'translate-x-0'
           }`}
         />
