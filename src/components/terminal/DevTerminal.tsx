@@ -98,7 +98,12 @@ export function DevTerminal() {
   };
 
   return (
-    <Modal open={open} onClose={() => setOpen(false)} labelledBy="terminal-title" className="max-w-xl bg-[#0b0e14] text-white">
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      labelledBy="terminal-title"
+      className="max-w-xl !bg-[#0b0e14] !text-white"
+    >
       <div className="flex items-center gap-2 border-b border-white/10 px-5 py-3.5">
         <span className="h-3 w-3 rounded-full bg-red-500/80" />
         <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
