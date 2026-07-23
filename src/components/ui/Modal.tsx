@@ -16,17 +16,23 @@ interface ModalProps {
 export function Modal({ open, onClose, children, labelledBy, className = '' }: ModalProps) {
   const reduceMotion = useReducedMotion();
   const panelRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   useLockBodyScroll(open);
 
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') onCloseRef.current();
     };
     document.addEventListener('keydown', onKeyDown);
     panelRef.current?.focus();
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [open, onClose]);
+    // Intentionally only re-run when `open` changes — `onClose` is often a
+    // fresh inline function each render, and re-running this would steal
+    // focus from content inside the modal (e.g. the dev terminal's input)
+    // on every keystroke.
+  }, [open]);
 
   return (
     <AnimatePresence>
