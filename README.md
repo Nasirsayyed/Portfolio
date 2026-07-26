@@ -69,11 +69,24 @@ The toggle in the navbar (and command palette) switches the whole site into a co
 
 ## Deployment
 
-This is a static Vite build — deploy `dist/` to any static host (Vercel, Netlify, GitHub Pages, Cloudflare Pages, S3 + CloudFront, etc.):
+This is a static Vite build (no backend, no serverless functions — the contact form uses `mailto:`), so it deploys to any static host. **Vercel** is the recommended path and needs zero extra setup beyond the included `vercel.json`:
+
+1. Push this repo to GitHub (already done if you're reading this from the repo).
+2. Go to [vercel.com/new](https://vercel.com/new), sign in with GitHub, and import `nasirsayyed/portfolio`.
+3. Vercel reads `vercel.json` automatically — build command `npm run build`, output directory `dist`. Click **Deploy**.
+4. You'll get a live `*.vercel.app` URL immediately, with a new deployment on every push to this branch/`main`, plus preview URLs for pull requests. Add a custom domain for free under Project → Settings → Domains.
+
+Other free options work the same way, importing the repo and using build command `npm run build` / output directory `dist`:
+
+- **Cloudflare Pages** — most generous free bandwidth, same git-connected flow.
+- **Netlify** — equivalent to Vercel; drag-and-drop `dist/` also works for a one-off deploy without connecting git.
+- **GitHub Pages** — free but manual: needs a GitHub Actions workflow (or the `gh-pages` package) to publish `dist/`, and if not served from the domain root you must set `base` in `vite.config.ts` to match the repo path.
+
+Manual/one-off build for any static host:
 
 ```bash
 npm run build
 # upload/point your host at the generated dist/ directory
 ```
 
-Update the canonical URL and Open Graph URLs in `index.html` to match your real domain before deploying.
+Update the canonical URL and Open Graph URLs in `index.html` to match your real domain once you have one.
