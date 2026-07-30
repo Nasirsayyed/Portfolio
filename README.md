@@ -31,7 +31,7 @@ npm run preview # preview the production build locally
 
 ```
 src/
-  assets/         static assets (drop a real profile photo in assets/images/)
+  assets/         static assets, incl. the profile photo (assets/images/profile.jpg / .webp)
   components/     feature-organized components (layout, hero, about, experience, ...)
   data/           centralized, typed content — portfolio.ts, experience.ts, projects.ts, themePresets.ts
   hooks/          reusable hooks (scroll spy, count-up, reduced motion, ...)
@@ -46,10 +46,7 @@ Edit `src/data/portfolio.ts`, `src/data/experience.ts`, and `src/data/projects.t
 
 ### Profile photo
 
-No photo was supplied with the source resume, so the hero uses a gradient initials avatar (`src/components/hero/ProfileImage.tsx`) instead of a placeholder/stock image. To use a real photo:
-
-1. Add the image to `src/assets/images/profile.jpg` (or `.png`/`.webp`).
-2. In `ProfileImage.tsx`, replace the initials `<span>` block with an `<img>` importing that asset, keeping `object-cover` and the existing frame/gradient/glow wrapper.
+`src/components/hero/ProfileImage.tsx` renders `src/assets/images/profile.jpg` (with a `profile.webp` served first via `<picture>`) inside the gradient frame/glow wrapper, `object-cover`/`object-top` so the headshot crops sensibly at any size. To swap the photo, replace both files (keeping the same names) — resize to ~900px on the long edge first to keep the bundle lean; a JPEG quality of ~85–90 and WebP quality of ~85 is a good balance of size vs. quality for a headshot.
 
 ### Resume
 

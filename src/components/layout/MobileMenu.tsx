@@ -35,11 +35,12 @@ export function MobileMenu({ items, activeId }: MobileMenuProps) {
     <AnimatePresence>
       {open ? (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.2 }}
-          className="glass fixed inset-0 z-[65] flex flex-col lg:hidden"
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+          animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+          exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+          transition={{ duration: reduceMotion ? 0 : 0.28, ease: [0.16, 1, 0.3, 1] }}
+          style={{ transformOrigin: 'top right' }}
+          className="fixed inset-0 z-[65] flex flex-col bg-background lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation"

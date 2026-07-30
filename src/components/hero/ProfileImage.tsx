@@ -2,13 +2,9 @@ import { motion } from 'framer-motion';
 import { personalInfo } from '@/data/portfolio';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useThemeStore } from '@/store/themeStore';
+import profileJpg from '@/assets/images/profile.jpg';
+import profileWebp from '@/assets/images/profile.webp';
 
-/**
- * No profile photograph was supplied with the resume, so this renders a
- * gradient initials avatar instead of fabricating a picture. To use a real
- * photo: drop it at `src/assets/images/profile.jpg` and swap the initials
- * block below for `<img src={profilePhoto} alt={personalInfo.name} ... />`.
- */
 export function ProfileImage() {
   const reduceMotion = useReducedMotion();
   const recruiterMode = useThemeStore((s) => s.recruiterMode);
@@ -41,13 +37,19 @@ export function ProfileImage() {
         animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <div className="flex h-full w-full items-center justify-center rounded-full bg-card">
-          <span
-            className="text-gradient-brand select-none text-6xl font-extrabold tracking-tight sm:text-7xl"
-            aria-label={personalInfo.name}
-          >
-            {personalInfo.initials}
-          </span>
+        <div className="h-full w-full overflow-hidden rounded-full bg-card">
+          <picture>
+            <source srcSet={profileWebp} type="image/webp" />
+            <img
+              src={profileJpg}
+              alt={`${personalInfo.name}, ${personalInfo.title}`}
+              width={900}
+              height={1352}
+              className="h-full w-full object-cover object-top"
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
         </div>
       </motion.div>
 
