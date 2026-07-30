@@ -57,18 +57,13 @@ export function MobileMenu({ items, activeId }: MobileMenuProps) {
             </button>
           </div>
 
-          <motion.ul
-            initial={reduceMotion ? undefined : 'hidden'}
-            animate={reduceMotion ? undefined : 'show'}
-            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-            className="flex flex-1 flex-col gap-1 overflow-y-auto px-5 py-6"
-          >
-            {items.map((item) => (
+          <ul className="flex flex-1 flex-col gap-1 overflow-y-auto px-5 py-6">
+            {items.map((item, index) => (
               <motion.li
                 key={item.id}
-                variants={
-                  reduceMotion ? undefined : { hidden: { opacity: 0, x: 16 }, show: { opacity: 1, x: 0 } }
-                }
+                initial={reduceMotion ? false : { opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.25, delay: reduceMotion ? 0 : index * 0.05 }}
               >
                 <button
                   type="button"
@@ -85,7 +80,7 @@ export function MobileMenu({ items, activeId }: MobileMenuProps) {
                 </button>
               </motion.li>
             ))}
-          </motion.ul>
+          </ul>
 
           <div className="flex flex-col gap-4 border-t border-border px-5 py-6">
             <RecruiterModeToggle />
