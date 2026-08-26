@@ -1,5 +1,7 @@
 # Nasirahmed Sayyed — Portfolio
 
+**🔗 Live site: [nasirahmedsayyed.vercel.app](https://nasirahmedsayyed.vercel.app/)**
+
 A premium, interactive developer portfolio built with React, TypeScript, Vite, Tailwind CSS, and Framer Motion. All content is sourced from `src/data/*.ts`, populated from the resume — nothing is fabricated.
 
 ## Stack
@@ -66,12 +68,11 @@ The toggle in the navbar (and command palette) switches the whole site into a co
 
 ## Deployment
 
-This is a static Vite build (no backend, no serverless functions — the contact form uses `mailto:`), so it deploys to any static host. **Vercel** is the recommended path and needs zero extra setup beyond the included `vercel.json`:
+**Currently deployed on Vercel at [https://nasirahmedsayyed.vercel.app/](https://nasirahmedsayyed.vercel.app/)** — every push to the connected branch redeploys automatically, and pull requests get their own preview URLs.
 
-1. Push this repo to GitHub (already done if you're reading this from the repo).
-2. Go to [vercel.com/new](https://vercel.com/new), sign in with GitHub, and import `nasirsayyed/portfolio`.
-3. Vercel reads `vercel.json` automatically — build command `npm run build`, output directory `dist`. Click **Deploy**.
-4. You'll get a live `*.vercel.app` URL immediately, with a new deployment on every push to this branch/`main`, plus preview URLs for pull requests. Add a custom domain for free under Project → Settings → Domains.
+This is a static Vite build (no backend, no serverless functions — the contact form uses `mailto:`), so it deploys to any static host. Vercel needs zero extra setup beyond the included `vercel.json`: import the repo at [vercel.com/new](https://vercel.com/new) and it picks up build command `npm run build` and output directory `dist` on its own. A custom domain can be added for free under Project → Settings → Domains.
+
+If you add a custom domain later, update the absolute URLs in `index.html` (canonical, `og:url`, `og:image`, `twitter:image`, and the JSON-LD `url`), plus `public/sitemap.xml` and `public/robots.txt`, which all currently point at the Vercel URL.
 
 Other free options work the same way, importing the repo and using build command `npm run build` / output directory `dist`:
 
