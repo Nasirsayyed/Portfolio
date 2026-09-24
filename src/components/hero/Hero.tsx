@@ -34,8 +34,11 @@ export function Hero() {
 
       <div className="container relative grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
         <motion.div
-          initial={reduceMotion ? undefined : 'hidden'}
-          animate={reduceMotion ? undefined : 'show'}
+          // Keep `animate` fixed at "show": if it's removed when reduced motion turns on
+          // mid-session (e.g. Recruiter Mode), Framer reverts children to "hidden".
+          // initial={false} skips the entrance instead.
+          initial={reduceMotion ? false : 'hidden'}
+          animate="show"
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}
           className="flex flex-col items-start gap-6 text-left [perspective:900px]"
         >
