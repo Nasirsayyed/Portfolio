@@ -61,6 +61,8 @@ Six full presets (Ocean, Royal, Emerald, Sunset, Monochrome, Cyber) each define 
 
 ## 3D Experience
 
+> Full write-up — architecture, performance numbers, fallbacks, bugs fixed and extension guide: **[docs/3D-IMPLEMENTATION.md](docs/3D-IMPLEMENTATION.md)**
+
 The site is built in two layers of 3D:
 
 - **WebGL (`src/components/three/`)** — `Scene3D` is a fixed full-page canvas behind all content: floating geometry, a particle field and lighting, with a camera that descends through the world as you scroll and drifts with the pointer. `HeroMedallion` puts the profile photo on a 3D medallion with orbiting tech rings that tilts toward the pointer and turns away as you scroll past. Both read the active theme's CSS variables (`useThemeColors`), so switching preset or light/dark recolours the 3D world live.
