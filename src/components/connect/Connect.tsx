@@ -53,13 +53,13 @@ export function Connect() {
               onClick={copyEmail}
               data-cursor="link"
               className="group mt-4 flex max-w-full items-center gap-4 text-left"
-              aria-label={`Copy email address ${personalInfo.email}`}
             >
               <span className="truncate font-mono text-[clamp(1.1rem,2.6vw,2rem)] tracking-tight text-foreground underline decoration-foreground/20 underline-offset-8 transition-colors group-hover:decoration-accent">
                 {personalInfo.email}
               </span>
               <span className="label inline-flex shrink-0 items-center gap-1.5 rounded-full border border-foreground/15 px-3 py-1.5 text-muted-foreground transition-colors group-hover:border-accent group-hover:text-accent">
                 <Copy className="h-3 w-3" aria-hidden="true" /> Copy
+                <span className="sr-only"> email address to clipboard</span>
               </span>
             </button>
             <p className="mt-5 max-w-md text-muted-foreground">

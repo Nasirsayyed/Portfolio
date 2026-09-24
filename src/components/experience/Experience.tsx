@@ -1,19 +1,19 @@
-import { useEffect, useRef, useState, type FocusEvent } from "react";
-import { ArrowRight } from "lucide-react";
-import { experience } from "@/data/experience";
-import { projects } from "@/data/projects";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useStickyProgress } from "@/hooks/useStickyProgress";
-import { scrollToTarget } from "@/motion/lenis";
-import { scrollToSection } from "@/utils/scroll";
-import { Chapter, ChapterLabel } from "@/components/ui/Chapter";
-import type { ExperienceEntry } from "@/types";
+import { useEffect, useRef, useState, type FocusEvent } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { experience } from '@/data/experience';
+import { projects } from '@/data/projects';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useStickyProgress } from '@/hooks/useStickyProgress';
+import { scrollToTarget } from '@/motion/lenis';
+import { scrollToSection } from '@/utils/scroll';
+import { Chapter, ChapterLabel } from '@/components/ui/Chapter';
+import type { ExperienceEntry } from '@/types';
 
 /** "RB Dashboard: Architected…" → "RB Dashboard" */
-const platformName = (highlight: string) => highlight.split(":")[0]!.trim();
+const platformName = (highlight: string) => highlight.split(':')[0]!.trim();
 
-const YEARS = ["2021", "2022", "2023", "2024", "2025", "2026"];
+const YEARS = ['2021', '2022', '2023', '2024', '2025', '2026'];
 
 function NowBadge() {
   return (
@@ -49,9 +49,7 @@ function Impact({ entry }: { entry: ExperienceEntry }) {
     <ol className="mt-6 space-y-3">
       {entry.impact.map((line, i) => (
         <li key={line} className="flex gap-4 text-foreground/90">
-          <span className="label mt-1 shrink-0 text-muted-foreground">
-            {String(i + 1).padStart(2, "0")}
-          </span>
+          <span className="label mt-1 shrink-0 text-muted-foreground">{String(i + 1).padStart(2, '0')}</span>
           <span className="leading-relaxed">{line}</span>
         </li>
       ))}
@@ -78,18 +76,12 @@ function Platforms({ entry }: { entry: ExperienceEntry }) {
   if (entry.current) return null;
   return (
     <div>
-      <p className="label text-muted-foreground">
-        {entry.highlights.length} production platforms
-      </p>
+      <p className="label text-muted-foreground">{entry.highlights.length} production platforms</p>
       <ul className="mt-4 divide-y divide-foreground/10 border-y border-foreground/10">
         {entry.highlights.map((h, i) => (
           <li key={h} className="flex items-baseline gap-4 py-2.5">
-            <span className="label text-muted-foreground">
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <span className="font-display text-xl leading-tight text-foreground">
-              {platformName(h)}
-            </span>
+            <span className="label text-muted-foreground">{String(i + 1).padStart(2, '0')}</span>
+            <span className="font-display text-xl leading-tight text-foreground">{platformName(h)}</span>
           </li>
         ))}
       </ul>
@@ -108,7 +100,7 @@ function Outro({ reduceMotion }: { reduceMotion: boolean }) {
         href="#connect"
         onClick={(e) => {
           e.preventDefault();
-          scrollToSection("connect", reduceMotion);
+          scrollToSection('connect', reduceMotion);
         }}
         className="label group mt-8 inline-flex items-center gap-3 text-foreground"
       >
@@ -126,8 +118,7 @@ const intro = (
   <>
     <ChapterLabel id="experience" />
     <h2 className="mt-6 font-display text-[clamp(2.5rem,5vw,4.75rem)] leading-[0.98] text-foreground">
-      Four years, <em className="italic">two</em> companies, {projects.length}{" "}
-      products shipped.
+      Four years, <em className="italic">two</em> companies, {projects.length} products shipped.
     </h2>
   </>
 );
@@ -143,17 +134,14 @@ function HorizontalTrack({ reduceMotion }: { reduceMotion: boolean }) {
   useEffect(() => {
     const el = track.current;
     if (!el) return;
-    const measure = () =>
-      setHeight(
-        Math.max(0, el.scrollWidth - window.innerWidth) + window.innerHeight,
-      );
+    const measure = () => setHeight(Math.max(0, el.scrollWidth - window.innerWidth) + window.innerHeight);
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(el);
-    window.addEventListener("resize", measure);
+    window.addEventListener('resize', measure);
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", measure);
+      window.removeEventListener('resize', measure);
     };
   }, []);
 
@@ -170,9 +158,7 @@ function HorizontalTrack({ reduceMotion }: { reduceMotion: boolean }) {
     const sec = section.current;
     const el = track.current;
     if (!sec || !el) return;
-    const panel = (e.target as HTMLElement).closest<HTMLElement>(
-      "[data-panel]",
-    );
+    const panel = (e.target as HTMLElement).closest<HTMLElement>('[data-panel]');
     if (!panel) return;
     const distance = Math.max(1, el.scrollWidth - window.innerWidth);
     const progress = Math.min(1, panel.offsetLeft / distance);
@@ -186,18 +172,14 @@ function HorizontalTrack({ reduceMotion }: { reduceMotion: boolean }) {
   const chronological = [...experience].reverse();
 
   return (
-    <div ref={section} style={{ height: height ?? "300svh" }} onFocus={onFocus}>
+    <div ref={section} style={{ height: height ?? '300svh' }} onFocus={onFocus}>
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-clip">
         <div className="flex flex-1 [mask-image:linear-gradient(90deg,transparent,#000_3rem,#000_calc(100%-3rem),transparent)] min-[1440px]:[mask-image:linear-gradient(90deg,transparent_9rem,#000_14rem,#000_calc(100%-4rem),transparent)]">
           <div
             ref={track}
             className="flex flex-1 items-start gap-[7vw] pl-[max(3rem,calc((100vw-1280px)/2+3rem))] pr-[12vw] pt-[17svh] will-change-transform"
           >
-            <section
-              data-panel
-              className="w-[30rem] shrink-0"
-              aria-label="Overview"
-            >
+            <section data-panel className="w-[30rem] shrink-0" aria-label="Overview">
               {intro}
               <p className="label mt-10 flex items-center gap-3 text-muted-foreground">
                 Scroll <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -206,24 +188,14 @@ function HorizontalTrack({ reduceMotion }: { reduceMotion: boolean }) {
 
             {chronological.map((entry) =>
               entry.current ? (
-                <article
-                  key={entry.id}
-                  data-panel
-                  className="w-[38rem] shrink-0"
-                >
+                <article key={entry.id} data-panel className="w-[38rem] shrink-0">
                   <RoleHeader entry={entry} />
-                  <p className="mt-6 max-w-xl text-lead text-muted-foreground">
-                    {entry.summary}
-                  </p>
+                  <p className="mt-6 max-w-xl text-lead text-muted-foreground">{entry.summary}</p>
                   <Impact entry={entry} />
                   <Tags entry={entry} />
                 </article>
               ) : (
-                <article
-                  key={entry.id}
-                  data-panel
-                  className="grid w-[64rem] shrink-0 grid-cols-[1.15fr_1fr] gap-14"
-                >
+                <article key={entry.id} data-panel className="grid w-[64rem] shrink-0 grid-cols-[1.15fr_1fr] gap-14">
                   <div>
                     <RoleHeader entry={entry} />
                     <Impact entry={entry} />
@@ -236,11 +208,7 @@ function HorizontalTrack({ reduceMotion }: { reduceMotion: boolean }) {
               ),
             )}
 
-            <section
-              data-panel
-              className="w-[26rem] shrink-0 self-center"
-              aria-label="What's next"
-            >
+            <section data-panel className="w-[26rem] shrink-0 self-center" aria-label="What's next">
               <Outro reduceMotion={reduceMotion} />
             </section>
           </div>
@@ -255,11 +223,7 @@ function HorizontalTrack({ reduceMotion }: { reduceMotion: boolean }) {
             <span className="text-accent">Now</span>
           </div>
           <div className="mt-3 h-px bg-foreground/10">
-            <div
-              ref={fill}
-              className="h-full origin-left bg-accent"
-              style={{ transform: "scaleX(0)" }}
-            />
+            <div ref={fill} className="h-full origin-left bg-accent" style={{ transform: 'scaleX(0)' }} />
           </div>
         </div>
       </div>
@@ -278,7 +242,7 @@ function VerticalTimeline({ reduceMotion }: { reduceMotion: boolean }) {
             <span
               aria-hidden="true"
               className={`absolute -left-[calc(1.5rem+4.5px)] top-1 h-2 w-2 rounded-full sm:-left-[calc(2.5rem+4.5px)] ${
-                entry.current ? "bg-accent" : "bg-foreground/40"
+                entry.current ? 'bg-accent' : 'bg-foreground/40'
               }`}
             />
             <article>
@@ -304,7 +268,7 @@ function VerticalTimeline({ reduceMotion }: { reduceMotion: boolean }) {
 
 export function Experience() {
   const reduceMotion = useReducedMotion();
-  const wide = useMediaQuery("(min-width: 1024px) and (min-height: 640px)");
+  const wide = useMediaQuery('(min-width: 1024px) and (min-height: 640px)');
 
   return (
     <Chapter id="experience">

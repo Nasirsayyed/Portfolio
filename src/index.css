@@ -118,7 +118,10 @@ html.has-cursor :is(input, textarea, select, [contenteditable='true'], [contente
 /* --------------------------------------------------------- Reduced motion */
 :root[data-motion='reduced'] *,
 :root[data-motion='reduced'] *::before,
-:root[data-motion='reduced'] *::after {
+:root[data-motion='reduced'] *::after,
+:root[data-recruiter] *,
+:root[data-recruiter] *::before,
+:root[data-recruiter] *::after {
   animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
@@ -196,9 +199,6 @@ html.has-cursor :is(input, textarea, select, [contenteditable='true'], [contente
     margin-bottom: -0.08em;
   }
 
-  .hairline {
-    border-color: var(--border);
-  }
 }
 
 @layer components {
@@ -246,30 +246,11 @@ html.has-cursor :is(input, textarea, select, [contenteditable='true'], [contente
 }
 
 @layer utilities {
-  /* Kept for the retained palette/drawer components: in v3 "brand" is the single accent. */
-  .text-gradient-brand {
-    color: var(--accent);
-  }
-  .bg-gradient-brand {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
-  }
-  .glass {
-    background-color: color-mix(in srgb, var(--card) 88%, transparent);
-    backdrop-filter: blur(18px) saturate(120%);
-    -webkit-backdrop-filter: blur(18px) saturate(120%);
-  }
   .focus-ring:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-none {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+
   .text-balance {
     text-wrap: balance;
   }

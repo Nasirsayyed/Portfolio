@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import { skills } from "@/data/portfolio";
-import { useUiStore } from "@/store/uiStore";
-import { Chapter, ChapterLabel } from "@/components/ui/Chapter";
-import type { StackLayer } from "@/types";
+import { useEffect, useState } from 'react';
+import { skills } from '@/data/portfolio';
+import { use3DEnabled } from '@/hooks/use3DEnabled';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useUiStore } from '@/store/uiStore';
+import { Chapter, ChapterLabel } from '@/components/ui/Chapter';
+import type { StackLayer } from '@/types';
 
-type Layer = Exclude<StackLayer, "tooling">;
+type Layer = Exclude<StackLayer, 'tooling'>;
 
 /**
  * The three bands sit where the Signal's architecture planes land on screen.
@@ -19,52 +21,45 @@ const LAYERS: {
   top: string;
 }[] = [
   {
-    id: "client",
-    index: "L1",
-    name: "Client",
-    blurb: "Interfaces, dashboards and maps",
-    top: "27%",
+    id: 'client',
+    index: 'L1',
+    name: 'Client',
+    blurb: 'Interfaces, dashboards and maps',
+    top: '27%',
   },
   {
-    id: "api",
-    index: "L2",
-    name: "API",
-    blurb: "Services, integrations and payments",
-    top: "50%",
+    id: 'api',
+    index: 'L2',
+    name: 'API',
+    blurb: 'Services, integrations and payments',
+    top: '50%',
   },
   {
-    id: "data",
-    index: "L3",
-    name: "Data",
-    blurb: "Schemas, queries and sync",
-    top: "73%",
+    id: 'data',
+    index: 'L3',
+    name: 'Data',
+    blurb: 'Schemas, queries and sync',
+    top: '73%',
   },
 ];
 
 const FILTERS: { id: Layer | null; label: string }[] = [
-  { id: null, label: "All" },
-  { id: "client", label: "Client" },
-  { id: "api", label: "API" },
-  { id: "data", label: "Data" },
+  { id: null, label: 'All' },
+  { id: 'client', label: 'Client' },
+  { id: 'api', label: 'API' },
+  { id: 'data', label: 'Data' },
 ];
 
-const byLayer = (layer: StackLayer) =>
-  skills.filter((s) => s.layer === layer).map((s) => s.name);
+const byLayer = (layer: StackLayer) => skills.filter((s) => s.layer === layer).map((s) => s.name);
 
-function Marquee({
-  items,
-  reverse = false,
-}: {
-  items: string[];
-  reverse?: boolean;
-}) {
+function Marquee({ items, reverse = false, still = false }: { items: string[]; reverse?: boolean; still?: boolean }) {
   // Two copies so translating by -50% loops seamlessly.
   const run = [...items, ...items];
   return (
     <div className="flex overflow-clip py-3 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
       <div
-        className={`flex shrink-0 items-center gap-8 whitespace-nowrap pr-8 motion-reduce:animate-none ${
-          reverse ? "animate-marquee-reverse" : "animate-marquee"
+        className={`flex shrink-0 items-center gap-8 whitespace-nowrap pr-8 ${
+          still ? '' : reverse ? 'animate-marquee-reverse' : 'animate-marquee'
         }`}
       >
         {run.map((item, i) => (
@@ -85,6 +80,9 @@ export function Stack() {
   const [hovered, setHovered] = useState<Layer | null>(null);
   const setStackFocus = useUiStore((s) => s.setStackFocus);
   const focus = hovered ?? selected;
+  // The pinned stage exists to line the bands up with the Signal's planes; with no field, lay them out flat.
+  const pinned = use3DEnabled();
+  const reduceMotion = useReducedMotion();
 
   // Drives which Signal plane glows in the accent colour.
   useEffect(() => {
@@ -94,14 +92,13 @@ export function Stack() {
 
   return (
     <Chapter id="stack">
-      <div className="h-[180svh]">
-        <div className="sticky top-0 h-[100svh] overflow-clip">
+      <div className={pinned ? 'h-[180svh]' : ''}>
+        <div className={pinned ? 'sticky top-0 h-[100svh] overflow-clip' : 'pb-16 pt-24 sm:pt-32'}>
           <div className="container relative z-10 flex items-end justify-between gap-6 pt-20 sm:pt-24">
             <div>
               <ChapterLabel id="stack" />
               <h2 className="mt-4 font-display text-display-sm leading-none text-foreground">
-                The stack,{" "}
-                <em className="italic text-accent">layer by layer.</em>
+                The stack, <em className="italic text-accent">layer by layer.</em>
               </h2>
             </div>
           </div>
@@ -112,8 +109,10 @@ export function Stack() {
             return (
               <div
                 key={layer.id}
-                className="absolute inset-x-0 -translate-y-1/2 transition-opacity duration-500 ease-signal"
-                style={{ top: layer.top, opacity: dimmed ? 0.25 : 1 }}
+                className={`transition-opacity duration-500 ease-signal ${
+                  pinned ? 'absolute inset-x-0 -translate-y-1/2' : 'mt-10 border-t border-foreground/10 pt-8 sm:mt-12'
+                }`}
+                style={{ top: pinned ? layer.top : undefined, opacity: dimmed ? 0.25 : 1 }}
                 onPointerEnter={() => setHovered(layer.id)}
                 onPointerLeave={() => setHovered(null)}
               >
@@ -125,9 +124,7 @@ export function Stack() {
                         {layer.name}
                       </span>
                     </div>
-                    <p className="label mt-2 hidden pl-9 text-muted-foreground lg:block">
-                      {layer.blurb}
-                    </p>
+                    <p className="label mt-2 hidden pl-9 text-muted-foreground lg:block">{layer.blurb}</p>
                   </div>
                   <ul
                     aria-label={`${layer.name} layer`}
@@ -147,12 +144,12 @@ export function Stack() {
             );
           })}
 
-          <div className="container absolute inset-x-0 bottom-6 z-10 flex flex-wrap items-center justify-between gap-4 sm:bottom-8">
-            <div
-              role="group"
-              aria-label="Highlight a layer"
-              className="flex flex-wrap gap-1.5"
-            >
+          <div
+            className={`container z-10 flex flex-wrap items-center justify-between gap-4 ${
+              pinned ? 'absolute inset-x-0 bottom-6 sm:bottom-8' : 'mt-12'
+            }`}
+          >
+            <div role="group" aria-label="Highlight a layer" className="flex flex-wrap gap-1.5">
               {FILTERS.map((filter) => {
                 const active = selected === filter.id;
                 return (
@@ -163,8 +160,8 @@ export function Stack() {
                     onClick={() => setSelected(filter.id)}
                     className={`label h-9 rounded-full border px-4 transition-colors ${
                       active
-                        ? "border-accent bg-accent text-accent-foreground"
-                        : "border-foreground/15 bg-background/60 text-muted-foreground hover:text-foreground"
+                        ? 'border-accent bg-accent text-accent-foreground'
+                        : 'border-foreground/15 bg-background/60 text-muted-foreground hover:text-foreground'
                     }`}
                   >
                     {filter.label}
@@ -173,26 +170,20 @@ export function Stack() {
               })}
             </div>
             <p className="label hidden text-muted-foreground md:block">
-              {skills.length} technologies · hover a layer to trace it
+              {skills.length} technologies{pinned ? ' · hover a layer to trace it' : ''}
             </p>
           </div>
         </div>
       </div>
 
       <div aria-hidden="true" className="border-y border-foreground/10 py-6">
-        <Marquee
-          items={[
-            ...byLayer("client"),
-            ...byLayer("api"),
-            ...byLayer("data"),
-          ].slice(0, 14)}
-        />
-        <Marquee items={byLayer("tooling")} reverse />
+        <Marquee items={[...byLayer('client'), ...byLayer('api'), ...byLayer('data')].slice(0, 14)} still={reduceMotion} />
+        <Marquee items={byLayer('tooling')} reverse still={reduceMotion} />
       </div>
 
       {/* The bands above are real lists; tooling only appears in the decorative marquee, so list it here. */}
       <ul className="sr-only" aria-label="Tooling and practices">
-        {byLayer("tooling").map((name) => (
+        {byLayer('tooling').map((name) => (
           <li key={name}>{name}</li>
         ))}
       </ul>

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
-import { ArrowDownRight } from 'lucide-react';
+import { ArrowDown, ArrowDownRight } from 'lucide-react';
 import { personalInfo } from '@/data/portfolio';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useScramble } from '@/hooks/useScramble';
+import { useThemeStore } from '@/store/themeStore';
 import { useUiStore } from '@/store/uiStore';
 import { scrollToSection } from '@/utils/scroll';
 import { Chapter, ChapterLabel } from '@/components/ui/Chapter';
@@ -84,6 +85,7 @@ function Name({ split }: { split: boolean }) {
 export function Boot() {
   const reduceMotion = useReducedMotion();
   const booted = useUiStore((s) => s.booted);
+  const recruiterMode = useThemeStore((s) => s.recruiterMode);
   const [intro] = useState(() => wantsIntro(reduceMotion));
   const reveal = intro ? (booted ? 'play' : 'armed') : undefined;
   const content = useRef<HTMLDivElement>(null);
@@ -97,7 +99,7 @@ export function Boot() {
   });
 
   return (
-    <Chapter id="boot" title="Introduction" className="flex min-h-[100svh] flex-col">
+    <Chapter id="boot" title="Introduction" className={`flex flex-col ${recruiterMode ? '' : 'min-h-[100svh]'}`}>
       <div
         ref={content}
         data-reveal={reveal}
@@ -112,7 +114,8 @@ export function Boot() {
           </p>
         </div>
 
-        <div className="mt-auto pt-[27svh] lg:pt-0">
+        {/* The gap leaves room for the Signal core; Recruiter Mode has no field, so it closes up. */}
+        <div className={`mt-auto ${recruiterMode ? 'pt-16 sm:pt-24' : 'pt-[27svh] lg:pt-0'}`}>
           <p className="rise label mb-5 text-muted-foreground sm:mb-7" style={delay(250)}>
             <span className="text-accent">●</span> 4+ years · .NET &amp; React · Sangli, India
           </p>
@@ -132,22 +135,33 @@ export function Boot() {
 
             <div className="rise flex flex-col gap-5 lg:col-span-5 lg:col-start-7" style={delay(600)}>
               <div className="flex flex-wrap items-center gap-3">
-                <Magnetic>
+                {recruiterMode ? (
                   <a
-                    href="#work"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection('work', reduceMotion);
-                    }}
-                    className="group inline-flex h-12 items-center gap-3 rounded-full bg-accent pl-6 pr-5 font-medium text-accent-foreground transition-[filter] hover:brightness-110"
+                    href={personalInfo.resumeUrl}
+                    download
+                    className="inline-flex h-12 items-center gap-3 rounded-full bg-accent pl-6 pr-5 font-medium text-accent-foreground transition-[filter] hover:brightness-110"
                   >
-                    View selected work
-                    <ArrowDownRight
-                      className="h-4 w-4 transition-transform duration-300 ease-signal group-hover:rotate-[-45deg]"
-                      aria-hidden="true"
-                    />
+                    Download résumé
+                    <ArrowDown className="h-4 w-4" aria-hidden="true" />
                   </a>
-                </Magnetic>
+                ) : (
+                  <Magnetic>
+                    <a
+                      href="#work"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection('work', reduceMotion);
+                      }}
+                      className="group inline-flex h-12 items-center gap-3 rounded-full bg-accent pl-6 pr-5 font-medium text-accent-foreground transition-[filter] hover:brightness-110"
+                    >
+                      View selected work
+                      <ArrowDownRight
+                        className="h-4 w-4 transition-transform duration-300 ease-signal group-hover:rotate-[-45deg]"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  </Magnetic>
+                )}
                 <Magnetic>
                   <a
                     href="#connect"
@@ -162,7 +176,7 @@ export function Boot() {
                 </Magnetic>
               </div>
               <div className="label flex items-center gap-3 text-muted-foreground">
-                <span>In a hurry?</span>
+                <span>{recruiterMode ? 'Flat, fast view' : 'In a hurry?'}</span>
                 <RecruiterModeToggle />
               </div>
             </div>

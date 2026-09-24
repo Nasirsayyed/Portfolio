@@ -46,14 +46,25 @@ export function Preloader() {
     let exitTimer = 0;
     const start = prev;
 
-    void document.fonts.ready.then(() => (fonts = true));
-    if (!signal) {
-      // Same specifier as App's lazy() import, so this warms the real chunk rather than a copy.
+    // Fonts first; the Signal chunk only starts once they're in, so it never delays the text.
+    // Same specifier as App's lazy() import, so this warms the real chunk rather than a copy.
+    const warmSignal = () => {
+      if (signal) return;
       import('@/components/signal/SignalField').then(
         () => (signal = true),
         () => (signal = true),
       );
-    }
+    };
+    void document.fonts.ready.then(
+      () => {
+        fonts = true;
+        warmSignal();
+      },
+      () => {
+        fonts = true;
+        warmSignal();
+      },
+    );
 
     const finish = () => {
       finished = true;

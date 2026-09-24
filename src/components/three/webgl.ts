@@ -1,10 +1,36 @@
 let cachedSupport: boolean | null = null;
 
+/** CPU rasterisers Chrome/Firefox fall back to on blocklisted or GPU-less machines. */
+const SOFTWARE_RENDERER = /swiftshader|llvmpipe|softpipe|software|basic render/i;
+/** Set to '1' to run the field even on a software renderer (testing in headless browsers). */
+export const FORCE_WEBGL_KEY = 'signal:force-webgl';
+
+function forced(): boolean {
+  try {
+    return localStorage.getItem(FORCE_WEBGL_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * True when a hardware-accelerated WebGL context is available. A software
+ * renderer can draw the field, but at hundreds of milliseconds per frame on
+ * the main thread, so those visitors get the static backdrop instead.
+ */
 export function isWebGLAvailable(): boolean {
   if (cachedSupport !== null) return cachedSupport;
   try {
     const canvas = document.createElement('canvas');
-    cachedSupport = Boolean(canvas.getContext('webgl2') ?? canvas.getContext('webgl'));
+    const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
+    if (!gl) {
+      cachedSupport = false;
+    } else {
+      const info = gl.getExtension('WEBGL_debug_renderer_info');
+      const renderer = String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+      cachedSupport = forced() || !SOFTWARE_RENDERER.test(renderer);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+    }
   } catch {
     cachedSupport = false;
   }
@@ -27,9 +53,4 @@ export function ensurePointerTracking(): void {
     },
     { passive: true },
   );
-}
-
-export function scrollProgress(): number {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
 }

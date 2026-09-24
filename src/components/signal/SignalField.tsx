@@ -167,17 +167,26 @@ export default function SignalField() {
   const finePointer = useFinePointer();
   const colors = useThemeColors();
   const [tier, setTier] = useState<Tier>(initialTier);
+  // Fades in once the GL context exists, so the field never pops in over the page.
+  const [shown, setShown] = useState(false);
 
   const post = tier === 'high' && colors.isDark && !reduceMotion;
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 -z-10 transition-opacity duration-1000 ease-signal"
+      style={{ opacity: shown ? 1 : 0 }}
+    >
       <Canvas
         camera={{ position: [0, 0, 10], fov: 45, near: 0.1, far: 60 }}
         dpr={[1, 1.5]}
         frameloop={reduceMotion ? 'demand' : 'always'}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
-        onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0);
+          requestAnimationFrame(() => setShown(true));
+        }}
       >
         {!reduceMotion && (
           <PerformanceMonitor

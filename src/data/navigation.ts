@@ -21,15 +21,3 @@ export const chapterCount = String(chapters.length).padStart(2, '0');
 export function chapterById(id: string): Chapter | undefined {
   return chapters.find((chapter) => chapter.id === id);
 }
-
-/**
- * Recruiter Mode reuses the same section ids (so the command palette and
- * deep links keep working) in résumé order.
- */
-export const recruiterChapters: Chapter[] = [
-  { id: 'experience', number: '01', label: 'Experience' },
-  { id: 'stack', number: '02', label: 'Skills' },
-  { id: 'work', number: '03', label: 'Projects' },
-  { id: 'proof', number: '04', label: 'Education' },
-  { id: 'connect', number: '05', label: 'Contact' },
-];

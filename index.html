@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Self-hosted fonts (@fontsource). Only the hero's display face and body face are
-         preloaded; Vite fingerprints these to the same files the @font-face rules use. -->
+    <!-- Self-hosted fonts (@fontsource). Every face used above the fold is preloaded — the hero
+         name's italic included, or its late swap re-wraps the name and shifts the layout.
+         Vite fingerprints these to the same files the @font-face rules use. -->
     <link
       rel="preload"
       as="font"
@@ -19,6 +20,20 @@
       type="font/woff2"
       crossorigin
       href="/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2"
     />
 
     <title>Nasirahmed Sayyed | Full Stack .NET Developer</title>
@@ -100,6 +115,7 @@
           root.setAttribute('data-theme', isDark ? 'dark' : 'light');
           root.style.setProperty('--background', grounds[preset][isDark ? 0 : 1]);
           root.style.setProperty('--foreground', isDark ? '#EDEDED' : '#0A0A0B');
+          if (state && state.recruiterMode) root.setAttribute('data-recruiter', '');
           if (sessionStorage.getItem('v3-booted')) root.setAttribute('data-booted', '');
         } catch (e) {}
       })();

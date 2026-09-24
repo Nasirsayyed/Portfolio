@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Command, Menu, SlidersHorizontal } from 'lucide-react';
 import { personalInfo } from '@/data/portfolio';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useThemeStore } from '@/store/themeStore';
 import { useUiStore } from '@/store/uiStore';
 import { scrollToSection } from '@/utils/scroll';
 import { AvailabilityChip } from '@/components/layout/AvailabilityChip';
@@ -19,6 +20,7 @@ export function TopBar() {
   const setThemeCustomizerOpen = useUiStore((s) => s.setThemeCustomizerOpen);
   const setMobileMenuOpen = useUiStore((s) => s.setMobileMenuOpen);
   const mobileMenuOpen = useUiStore((s) => s.mobileMenuOpen);
+  const recruiterMode = useThemeStore((s) => s.recruiterMode);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -46,9 +48,11 @@ export function TopBar() {
                 scrollToSection('boot', reduceMotion);
               }}
               className="font-display text-2xl italic leading-none text-foreground"
-              aria-label={`${personalInfo.name} — back to top`}
             >
-              N<span className="text-accent">.</span>S<span className="text-accent">.</span>
+              <span aria-hidden="true">
+                N<span className="text-accent">.</span>S<span className="text-accent">.</span>
+              </span>
+              <span className="sr-only">{personalInfo.name}, back to top</span>
             </a>
             <AvailabilityChip className="hidden md:inline-flex" />
           </div>
@@ -76,7 +80,9 @@ export function TopBar() {
             <a
               href={personalInfo.resumeUrl}
               download
-              className="label hidden h-9 items-center rounded-full bg-foreground px-4 text-background transition-opacity hover:opacity-85 md:inline-flex"
+              className={`label h-9 items-center rounded-full bg-foreground px-3 text-background transition-opacity hover:opacity-85 sm:px-4 md:inline-flex ${
+                recruiterMode ? 'inline-flex' : 'hidden'
+              }`}
             >
               Résumé ↓
             </a>

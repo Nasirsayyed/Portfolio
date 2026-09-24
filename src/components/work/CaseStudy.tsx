@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, m } from "framer-motion";
-import { ArrowLeft, ArrowRight, X } from "lucide-react";
-import { projects } from "@/data/projects";
-import { useFocusTrap } from "@/hooks/useFocusTrap";
-import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useUiStore } from "@/store/uiStore";
-import { Cover } from "@/components/work/Cover";
-import type { Project } from "@/types";
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, m } from 'framer-motion';
+import { ArrowLeft, ArrowRight, X } from 'lucide-react';
+import { projects } from '@/data/projects';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useUiStore } from '@/store/uiStore';
+import { Cover } from '@/components/work/Cover';
+import type { Project } from '@/types';
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const pad = (n: number) => String(n).padStart(2, "0");
+const pad = (n: number) => String(n).padStart(2, '0');
 
 interface PanelProps {
   project: Project;
@@ -22,14 +22,7 @@ interface PanelProps {
   onStep: (delta: number) => void;
 }
 
-function Panel({
-  project,
-  index,
-  shared,
-  reduceMotion,
-  onClose,
-  onStep,
-}: PanelProps) {
+function Panel({ project, index, shared, reduceMotion, onClose, onStep }: PanelProps) {
   const dialog = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   useFocusTrap(dialog, true);
@@ -37,14 +30,14 @@ function Panel({
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === 'Escape') onClose();
       // Arrow keys page between projects unless the reader is in a form control.
-      if ((e.target as HTMLElement).closest("input, textarea")) return;
-      if (e.key === "ArrowRight") onStep(1);
-      if (e.key === "ArrowLeft") onStep(-1);
+      if ((e.target as HTMLElement).closest('input, textarea')) return;
+      if (e.key === 'ArrowRight') onStep(1);
+      if (e.key === 'ArrowLeft') onStep(-1);
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [onClose, onStep]);
 
   // Paging to another project starts it from the top.
@@ -78,25 +71,17 @@ function Panel({
         aria-hidden="true"
         className="absolute inset-0 bg-background"
         initial={{
-          clipPath: reduceMotion
-            ? "inset(0% 0% 0% 0%)"
-            : "inset(100% 0% 0% 0%)",
+          clipPath: reduceMotion ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
         }}
-        animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+        animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
         exit={{
-          clipPath: reduceMotion
-            ? "inset(0% 0% 0% 0%)"
-            : "inset(0% 0% 100% 0%)",
+          clipPath: reduceMotion ? 'inset(0% 0% 0% 0%)' : 'inset(0% 0% 100% 0%)',
           opacity: reduceMotion ? 0 : 1,
         }}
         transition={{ duration: reduceMotion ? 0 : 0.75, ease }}
       />
 
-      <div
-        ref={scroller}
-        data-lenis-prevent
-        className="relative h-full overflow-y-auto overscroll-contain"
-      >
+      <div ref={scroller} data-lenis-prevent className="relative h-full overflow-y-auto overscroll-contain">
         <m.div
           {...fade}
           transition={{ ...fade.transition, delay: reduceMotion ? 0 : 0.2 }}
@@ -104,13 +89,10 @@ function Panel({
         >
           <div className="container flex h-16 items-center justify-between">
             <p className="label text-muted-foreground">
-              Case study <span className="text-accent">{pad(index + 1)}</span> /{" "}
-              {pad(projects.length)}
+              Case study <span className="text-accent">{pad(index + 1)}</span> / {pad(projects.length)}
             </p>
             <div className="flex items-center gap-2">
-              <span className="label hidden text-muted-foreground sm:inline">
-                Esc to close
-              </span>
+              <span className="label hidden text-muted-foreground sm:inline">Esc to close</span>
               <button
                 type="button"
                 onClick={onClose}
@@ -139,9 +121,7 @@ function Panel({
             <m.h2
               id="case-study-title"
               layoutId={shared ? `work-name-${project.id}` : undefined}
-              initial={
-                shared ? undefined : { opacity: 0, y: reduceMotion ? 0 : 30 }
-              }
+              initial={shared ? undefined : { opacity: 0, y: reduceMotion ? 0 : 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ duration: reduceMotion ? 0 : 0.8, ease }}
@@ -154,40 +134,30 @@ function Panel({
               <dl className="mt-12 grid gap-6 border-y border-foreground/10 py-6 sm:grid-cols-2 lg:grid-cols-4">
                 {(
                   [
-                    ["Company", project.company],
-                    ["Role", project.role],
-                    ["When", project.period],
-                    ["Stack", project.technologies.join(" · ")],
+                    ['Company', project.company],
+                    ['Role', project.role],
+                    ['When', project.period],
+                    ['Stack', project.technologies.join(' · ')],
                   ] as const
                 ).map(([label, value]) => (
                   <div key={label}>
                     <dt className="label text-muted-foreground">{label}</dt>
-                    <dd className="mt-2 text-sm leading-relaxed text-foreground">
-                      {value}
-                    </dd>
+                    <dd className="mt-2 text-sm leading-relaxed text-foreground">{value}</dd>
                   </div>
                 ))}
               </dl>
 
-              <Cover
-                project={project}
-                number={index + 1}
-                size="lg"
-                className="mt-12 aspect-[16/9] sm:aspect-[16/7]"
-              />
+              <Cover project={project} number={index + 1} size="lg" className="mt-12 aspect-[16/9] sm:aspect-[16/7]" />
 
               <div className="mt-20 space-y-14 sm:mt-28 sm:space-y-20">
                 {(
                   [
-                    ["01", "The problem", project.problem],
-                    ["02", "The approach", project.approach],
-                    ["03", "The result", project.result],
+                    ['01', 'The problem', project.problem],
+                    ['02', 'The approach', project.approach],
+                    ['03', 'The result', project.result],
                   ] as const
                 ).map(([n, label, text]) => (
-                  <section
-                    key={n}
-                    className="grid gap-4 lg:grid-cols-12 lg:gap-6"
-                  >
+                  <section key={n} className="grid gap-4 lg:grid-cols-12 lg:gap-6">
                     <h3 className="label flex gap-3 text-muted-foreground lg:col-span-3">
                       <span className="text-accent">{n}</span>
                       {label}
@@ -204,19 +174,11 @@ function Panel({
                     What shipped
                   </h3>
                   <div className="lg:col-span-8">
-                    <p className="text-lead text-muted-foreground">
-                      {project.description}
-                    </p>
+                    <p className="text-lead text-muted-foreground">{project.description}</p>
                     <ul className="mt-8 divide-y divide-foreground/10 border-y border-foreground/10">
                       {project.features.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex gap-4 py-4 text-foreground/90"
-                        >
-                          <span
-                            className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-accent"
-                            aria-hidden="true"
-                          />
+                        <li key={feature} className="flex gap-4 py-4 text-foreground/90">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-accent" aria-hidden="true" />
                           {feature}
                         </li>
                       ))}
@@ -228,16 +190,12 @@ function Panel({
           </m.article>
         </AnimatePresence>
 
-        <m.nav
-          {...fade}
-          aria-label="More case studies"
-          className="border-t border-foreground/10"
-        >
+        <m.nav {...fade} aria-label="More case studies" className="border-t border-foreground/10">
           <div className="container grid sm:grid-cols-2">
             {(
               [
-                [-1, "Previous", prev],
-                [1, "Next", next],
+                [-1, 'Previous', prev],
+                [1, 'Next', next],
               ] as const
             ).map(([delta, label, target]) => (
               <button
@@ -246,18 +204,14 @@ function Panel({
                 onClick={() => onStep(delta)}
                 className={`group flex flex-col gap-3 py-10 text-left sm:py-14 ${
                   delta === 1
-                    ? "border-t border-foreground/10 sm:items-end sm:border-l sm:border-t-0 sm:pl-8 sm:text-right"
-                    : "sm:pr-8"
+                    ? 'border-t border-foreground/10 sm:items-end sm:border-l sm:border-t-0 sm:pl-8 sm:text-right'
+                    : 'sm:pr-8'
                 }`}
               >
                 <span className="label flex items-center gap-2 text-muted-foreground">
-                  {delta === -1 && (
-                    <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-                  )}
+                  {delta === -1 && <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />}
                   {label}
-                  {delta === 1 && (
-                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                  )}
+                  {delta === 1 && <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />}
                 </span>
                 <span className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-none text-foreground transition-colors group-hover:text-accent">
                   {target.name}
@@ -287,8 +241,7 @@ export default function CaseStudy({ origin }: { origin: string | null }) {
 
   const close = () => setActiveProjectId(null);
   const step = (delta: number) => {
-    const target =
-      projects[(index + delta + projects.length) % projects.length];
+    const target = projects[(index + delta + projects.length) % projects.length];
     if (!target) return;
     setPaged(true);
     setActiveProjectId(target.id);

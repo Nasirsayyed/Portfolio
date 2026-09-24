@@ -25,7 +25,7 @@ export function Footer() {
 
         <nav aria-label="Footer" className="lg:col-span-3">
           <p className="label text-muted-foreground">Index</p>
-          <ol className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2">
+          <ol className="mt-3 grid grid-cols-2 gap-x-6">
             {chapters.map((chapter) => (
               <li key={chapter.id}>
                 <a
@@ -34,7 +34,7 @@ export function Footer() {
                     e.preventDefault();
                     scrollToSection(chapter.id, reduceMotion);
                   }}
-                  className="label flex gap-2 text-foreground transition-colors hover:text-accent"
+                  className="label flex min-h-8 items-center gap-2 text-foreground transition-colors hover:text-accent"
                 >
                   <span className="text-muted-foreground">{chapter.number}</span>
                   {chapter.label}

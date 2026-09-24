@@ -45,12 +45,13 @@ const keyframes: Record<string, KeyframeFn> = {
   }),
   work: () => ({ stage: 3, offsetX: 0, offsetY: 0, scale: 1, dim: 0.32 }),
   proof: () => ({ stage: 3, offsetX: 0, offsetY: 0, scale: 1.05, dim: 0.22 }),
+  // On phones the pulse drops below the copy so it never sits behind text.
   connect: (wide) => ({
     stage: 4,
-    offsetX: wide ? 3.2 : 0,
-    offsetY: wide ? 0 : -1.4,
-    scale: 1,
-    dim: 1,
+    offsetX: wide ? 3.2 : 0.4,
+    offsetY: wide ? 0 : -2.7,
+    scale: wide ? 1 : 0.7,
+    dim: wide ? 1 : 0.75,
   }),
 };
 
@@ -78,9 +79,7 @@ let cacheFrame = 0;
 export function sampleSignalTarget(frame: number): SignalTarget {
   // Chapter elements rarely change; re-query about once a second.
   if (frame - cacheFrame > 60 || cachedChapters.length === 0) {
-    cachedChapters = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-chapter]"),
-    );
+    cachedChapters = Array.from(document.querySelectorAll<HTMLElement>('[data-chapter]'));
     cacheFrame = frame;
   }
   const wide = window.innerWidth >= 1024;
@@ -96,33 +95,20 @@ export function sampleSignalTarget(frame: number): SignalTarget {
     const rect = cachedChapters[i]!.getBoundingClientRect();
     if (rect.top <= probe) {
       index = i;
-      local =
-        rect.height > 0
-          ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height))
-          : 0;
+      local = rect.height > 0 ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height)) : 0;
       height = Math.max(1, rect.height);
     }
-    if (cachedChapters[i]!.dataset.chapter === "experience") {
-      travel =
-        rect.height > 0
-          ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height))
-          : 0;
+    if (cachedChapters[i]!.dataset.chapter === 'experience') {
+      travel = rect.height > 0 ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height)) : 0;
     }
   }
 
-  const current =
-    keyframes[cachedChapters[index]!.dataset.chapter ?? "boot"] ??
-    keyframes.boot!;
+  const current = keyframes[cachedChapters[index]!.dataset.chapter ?? 'boot'] ?? keyframes.boot!;
   const nextEl = cachedChapters[index + 1];
-  const next = nextEl
-    ? (keyframes[nextEl.dataset.chapter ?? ""] ?? current)
-    : current;
+  const next = nextEl ? (keyframes[nextEl.dataset.chapter ?? ''] ?? current) : current;
   const a = current(wide);
   const b = next(wide);
-  const start = Math.max(
-    MORPH_START,
-    1 - (window.innerHeight * MORPH_VIEWPORTS) / height,
-  );
+  const start = Math.max(MORPH_START, 1 - (window.innerHeight * MORPH_VIEWPORTS) / height);
   const t = smooth(Math.min(1, Math.max(0, (local - start) / (1 - start))));
 
   return {

@@ -1,9 +1,11 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { LazyMotion } from 'framer-motion';
 import { useApplyTheme } from '@/hooks/useApplyTheme';
 import { use3DEnabled } from '@/hooks/use3DEnabled';
+import { useIdleReady } from '@/hooks/useIdleReady';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useThemeStore } from '@/store/themeStore';
+import { useUiStore } from '@/store/uiStore';
 import { Cursor } from '@/components/cursor/Cursor';
 import { Atmosphere, FallbackBackdrop } from '@/components/layout/Atmosphere';
 import { WebGLBoundary } from '@/components/three/WebGLBoundary';
@@ -30,25 +32,38 @@ const loadMotionFeatures = () => import('@/motion/features').then((mod) => mod.d
 export default function App() {
   useApplyTheme();
   const recruiterMode = useThemeStore((s) => s.recruiterMode);
+
+  // Lets CSS treat Recruiter Mode as reduced motion (see index.css); index.html sets it before first paint too.
+  useEffect(() => {
+    document.documentElement.toggleAttribute('data-recruiter', recruiterMode);
+  }, [recruiterMode]);
   // Reduced motion already folds in Recruiter Mode.
   const reduceMotion = useReducedMotion();
   const webgl = use3DEnabled();
+  // The field and smooth scrolling mount only after the intro hands over and the browser is idle,
+  // so neither competes with fonts or the first paint.
+  const booted = useUiStore((s) => s.booted);
+  const idle = useIdleReady();
+  const deferredReady = booted && idle;
 
   return (
-    <LazyMotion features={loadMotionFeatures}>
+    // strict: only the tree-shakable `m` components may be used, keeping full framer-motion out of the entry.
+    <LazyMotion features={loadMotionFeatures} strict>
       {!recruiterMode && <Atmosphere />}
       {webgl ? (
-        <WebGLBoundary fallback={<FallbackBackdrop />}>
-          <Suspense fallback={<FallbackBackdrop />}>
-            <SignalField />
-          </Suspense>
-        </WebGLBoundary>
+        deferredReady && (
+          <WebGLBoundary fallback={<FallbackBackdrop />}>
+            <Suspense fallback={null}>
+              <SignalField />
+            </Suspense>
+          </WebGLBoundary>
+        )
       ) : (
         !recruiterMode && <FallbackBackdrop />
       )}
       <Cursor />
       <Preloader />
-      {!reduceMotion && (
+      {!reduceMotion && deferredReady && (
         <Suspense fallback={null}>
           <MotionEngine />
         </Suspense>
