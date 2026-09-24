@@ -90,37 +90,43 @@ export const achievements: Achievement[] = [
     title: 'SaaS Product, End-to-End',
     description:
       'Owned the LogiSKU WMS SaaS platform from sign-up and onboarding through subscription billing, built on React.js 19 and .NET Core 8.',
-    icon: 'rocket',
+    figure: 'E2E',
+    figureLabel: 'Sign-up to subscription billing',
   },
   {
     title: 'Payment Gateway Integration',
     description:
       'Integrated Razorpay for secure, automated subscription payments and seamless checkout flows.',
-    icon: 'credit-card',
+    figure: 'Razorpay',
+    figureLabel: 'Automated subscription payments',
   },
   {
     title: 'Enterprise Dashboards',
     description:
       'Architected real-time analytics dashboards with ECharts.js and JQWidgets, cutting load time by 30% via modular iframe rendering.',
-    icon: 'gauge',
+    figure: '−30%',
+    figureLabel: 'Dashboard load time',
   },
   {
     title: 'Workflow Automation',
     description:
       'Built automated console applications for scheduled email reporting and stored-procedure triggers, saving 6+ hours per week.',
-    icon: 'layers',
+    figure: '6h+',
+    figureLabel: 'Manual reporting saved weekly',
   },
   {
     title: 'Data Visualization at Scale',
     description:
       'Delivered interactive Leaflet.js map visualizations covering 50+ countries and 10,000+ research records for government and healthcare platforms.',
-    icon: 'cloud',
+    figure: '50+',
+    figureLabel: 'Countries mapped · 10k+ records',
   },
   {
     title: 'Cross-Domain Delivery',
     description:
       'Shipped production software across logistics, healthcare, agriculture, and government domains, serving 100+ end users per platform.',
-    icon: 'users',
+    figure: '4',
+    figureLabel: 'Industries shipped to',
   },
 ];
 

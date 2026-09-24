@@ -201,6 +201,50 @@ html.has-cursor :is(input, textarea, select, [contenteditable='true'], [contente
   }
 }
 
+@layer components {
+  /* Proof tiles: a pointer-tracked glow and border light. --x/--y are set on
+     every tile from one handler, so neighbours catch the edge of the light. */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before,
+  .spotlight::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-signal);
+  }
+  .spotlight::before {
+    z-index: -1;
+    background: radial-gradient(
+      30rem circle at var(--x, 50%) var(--y, 50%),
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 45%
+    );
+  }
+  .spotlight::after {
+    padding: 1px;
+    background: radial-gradient(
+      22rem circle at var(--x, 50%) var(--y, 50%),
+      color-mix(in srgb, var(--accent) 70%, transparent),
+      transparent 42%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .spotlight-grid:hover .spotlight::before,
+  .spotlight-grid:hover .spotlight::after {
+    opacity: 1;
+  }
+}
+
 @layer utilities {
   /* Kept for the retained palette/drawer components: in v3 "brand" is the single accent. */
   .text-gradient-brand {

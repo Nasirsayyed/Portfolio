@@ -10,16 +10,14 @@ import { WebGLBoundary } from '@/components/three/WebGLBoundary';
 import { ChapterNav } from '@/components/layout/ChapterNav';
 import { TopBar } from '@/components/layout/TopBar';
 import { Footer } from '@/components/layout/Footer';
-import { Chapter } from '@/components/ui/Chapter';
 import { Boot } from '@/components/boot/Boot';
 import { Preloader } from '@/components/boot/Preloader';
 import { About } from '@/components/about/About';
 import { Experience } from '@/components/experience/Experience';
 import { Stack } from '@/components/stack/Stack';
 import { Work } from '@/components/work/Work';
-import { Achievements } from '@/components/achievements/Achievements';
-import { Education } from '@/components/education/Education';
-import { Contact } from '@/components/contact/Contact';
+import { Proof } from '@/components/proof/Proof';
+import { Connect } from '@/components/connect/Connect';
 import { ThemeCustomizer } from '@/components/theme/ThemeCustomizer';
 import { CommandPalette } from '@/components/command-palette/CommandPalette';
 import { DevTerminal } from '@/components/terminal/DevTerminal';
@@ -65,13 +63,8 @@ export default function App() {
         <Stack />
         <Experience />
         <Work />
-        <Chapter id="proof">
-          <Achievements />
-          <Education />
-        </Chapter>
-        <Chapter id="connect">
-          <Contact />
-        </Chapter>
+        <Proof />
+        <Connect />
       </main>
 
       <Footer />

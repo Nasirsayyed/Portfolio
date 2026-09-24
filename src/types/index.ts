@@ -99,7 +99,9 @@ export interface Project {
 export interface Achievement {
   title: string;
   description: string;
-  icon: 'rocket' | 'credit-card' | 'layers' | 'gauge' | 'cloud' | 'users';
+  /** Headline figure for the Proof tile, taken from the résumé. */
+  figure: string;
+  figureLabel: string;
 }
 
 export interface EducationEntry {
