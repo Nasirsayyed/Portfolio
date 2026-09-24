@@ -21,7 +21,7 @@ export interface SignalKeyframe {
 type KeyframeFn = (wide: boolean) => SignalKeyframe;
 
 const keyframes: Record<string, KeyframeFn> = {
-  boot: (wide) => ({ stage: 0, offsetX: wide ? 3.4 : 0, offsetY: wide ? 0.5 : 1.2, scale: wide ? 1 : 0.85, dim: 1 }),
+  boot: (wide) => ({ stage: 0, offsetX: wide ? 3.6 : 0.5, offsetY: wide ? 1 : 2.15, scale: wide ? 0.92 : 0.6, dim: 1 }),
   about: (wide) => ({ stage: 0, offsetX: wide ? 5.2 : 1.8, offsetY: wide ? -0.6 : 2.6, scale: 0.7, dim: 0.45 }),
   stack: () => ({ stage: 1, offsetX: 0, offsetY: 0, scale: 1, dim: 0.95 }),
   experience: () => ({ stage: 2, offsetX: 0, offsetY: -1.2, scale: 1, dim: 0.6 }),

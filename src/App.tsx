@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react';
 import { LazyMotion } from 'framer-motion';
-import { personalInfo } from '@/data/portfolio';
 import { useApplyTheme } from '@/hooks/useApplyTheme';
 import { use3DEnabled } from '@/hooks/use3DEnabled';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -12,6 +11,8 @@ import { ChapterNav } from '@/components/layout/ChapterNav';
 import { TopBar } from '@/components/layout/TopBar';
 import { Footer } from '@/components/layout/Footer';
 import { Chapter } from '@/components/ui/Chapter';
+import { Boot } from '@/components/boot/Boot';
+import { Preloader } from '@/components/boot/Preloader';
 import { About } from '@/components/about/About';
 import { ExperienceTimeline } from '@/components/experience/ExperienceTimeline';
 import { SkillsGrid } from '@/components/skills/SkillsGrid';
@@ -48,6 +49,7 @@ export default function App() {
         !recruiterMode && <FallbackBackdrop />
       )}
       <Cursor />
+      <Preloader />
       {!reduceMotion && (
         <Suspense fallback={null}>
           <MotionEngine />
@@ -58,11 +60,7 @@ export default function App() {
       {!recruiterMode && <ChapterNav />}
 
       <main id="main-content" className="overflow-x-clip">
-        <Chapter id="boot" className="flex min-h-[100svh] items-end pb-20">
-          <div className="container">
-            <h1 className="font-display text-mega">{personalInfo.name}</h1>
-          </div>
-        </Chapter>
+        <Boot />
         <About />
         <Chapter id="stack">
           <SkillsGrid />
