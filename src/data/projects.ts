@@ -3,6 +3,7 @@ import type { Project } from '@/types';
 export const projects: Project[] = [
   {
     id: 'logisku',
+    metric: { value: 'E2E', label: 'Sign-up to subscription billing' },
     name: 'LogiSKU',
     tagline: 'Warehouse Management SaaS',
     year: '2026',
@@ -12,7 +13,6 @@ export const projects: Project[] = [
     approach:
       'Built the product end to end on React.js 19 and .NET Core 8, owning every step of the user journey, and integrated the Razorpay gateway for subscription billing.',
     result: 'A complete SaaS flow — sign-up, onboarding, and secure, automated subscription payments with a seamless checkout.',
-    title: 'LogiSKU — WMS SaaS Platform',
     company: 'Simulytics Tech Private Limited',
     period: 'April 2026 – Present',
     description:
@@ -24,10 +24,10 @@ export const projects: Project[] = [
       'Seamless checkout experience for SaaS subscribers',
     ],
     technologies: ['React.js 19', '.NET Core 8', 'Razorpay', 'REST API', 'SQL Server'],
-    gradient: ['#2563eb', '#7c3aed'],
   },
   {
     id: 'rb-dashboard',
+    metric: { value: '−30%', label: 'Dashboard load time' },
     name: 'RB Dashboard',
     tagline: 'Real-time analytics dashboard',
     year: '2021–26',
@@ -36,7 +36,6 @@ export const projects: Project[] = [
     approach:
       'Architected it on ECharts.js and JQWidgets (.NET) with database-driven menus, role-based access control and modular iframe rendering.',
     result: 'Real-time, responsive analytics with 30% faster dashboard load times.',
-    title: 'RB Dashboard',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
     description:
@@ -49,10 +48,10 @@ export const projects: Project[] = [
       'Modular iframe rendering — reduced dashboard load time by 30%',
     ],
     technologies: ['.NET', 'ECharts.js', 'JQWidgets', 'SQL Server'],
-    gradient: ['#0ea5e9', '#22d3ee'],
   },
   {
     id: 'workflow-automation',
+    metric: { value: '6h+', label: 'Manual reporting saved weekly' },
     name: 'Workflow Automation',
     tagline: 'Scheduled reporting engine',
     year: '2021–26',
@@ -61,7 +60,6 @@ export const projects: Project[] = [
     approach:
       'Built scheduled console applications that trigger stored procedures, generate Excel reports and email them automatically.',
     result: '6+ hours a week of manual reporting eliminated.',
-    title: 'Workflow Automation Suite',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
     description:
@@ -73,10 +71,10 @@ export const projects: Project[] = [
       'Eliminated 6+ hours per week of manual reporting effort',
     ],
     technologies: ['C#', '.NET', 'SQL Server'],
-    gradient: ['#16a34a', '#84cc16'],
   },
   {
     id: 'sofosh-hsr',
+    metric: { value: '100+', label: 'Case managers served' },
     name: 'Sofosh HSR Portal',
     tagline: 'Adoption case management',
     year: '2021–26',
@@ -85,7 +83,6 @@ export const projects: Project[] = [
     approach:
       'Developed a full-stack React.js + .NET Core app with CRUD workflows, file uploads, email reminders and post-placement tracking.',
     result: 'A mobile-responsive portal serving 100+ case managers.',
-    title: 'Sofosh HSR Portal',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
     description:
@@ -98,10 +95,10 @@ export const projects: Project[] = [
       'Mobile-responsive UI serving 100+ case managers',
     ],
     technologies: ['React.js', '.NET Core', 'SQL Server'],
-    gradient: ['#db2777', '#f97316'],
   },
   {
     id: 'valneva-heatmap',
+    metric: { value: '50+', label: 'Countries on the heatmap' },
     name: 'Valneva Heatmap',
     tagline: 'Global disease surveillance map',
     year: '2021–26',
@@ -110,7 +107,6 @@ export const projects: Project[] = [
     approach:
       'Engineered a .NET Core microservice that ingests and persists the daily records, feeding an interactive Leaflet.js heatmap.',
     result: 'Global case distribution visualised across 50+ countries.',
-    title: 'Valneva Disease Heatmap',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
     description:
@@ -122,10 +118,10 @@ export const projects: Project[] = [
       'Case distribution visualization across 50+ countries',
     ],
     technologies: ['.NET Core', 'Leaflet.js', 'REST API'],
-    gradient: ['#dc2626', '#f59e0b'],
   },
   {
     id: 'emo-wms',
+    metric: { value: '20+', label: 'Warehouse staff on the system' },
     name: 'EMO WMS',
     tagline: 'Warehouse operations front end',
     year: '2021–26',
@@ -134,7 +130,6 @@ export const projects: Project[] = [
     approach:
       'Built front-end modules in JavaScript, AJAX and JSON with dynamic grid filtering and real-time data rendering.',
     result: 'Streamlined day-to-day operations for 20+ warehouse staff.',
-    title: 'EMO Warehouse Management System',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
     description:
@@ -146,10 +141,10 @@ export const projects: Project[] = [
       'Streamlined operations for 20+ warehouse staff',
     ],
     technologies: ['JavaScript', 'AJAX', 'JSON'],
-    gradient: ['#0891b2', '#2563eb'],
   },
   {
     id: 'buktec-middleware',
+    metric: { value: '−80%', label: 'Manual data entry' },
     name: 'BukTec Middleware',
     tagline: 'ERP ↔ web sync',
     year: '2021–26',
@@ -158,7 +153,6 @@ export const projects: Project[] = [
     approach:
       'Designed a desktop middleware application that syncs data in both directions between Tally ERP and the BukTec Web APIs.',
     result: '80% less manual data entry and no more sync errors.',
-    title: 'BukTec Desktop Middleware',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
     description:
@@ -170,10 +164,10 @@ export const projects: Project[] = [
       'Eliminated sync errors',
     ],
     technologies: ['C#', '.NET', 'REST API'],
-    gradient: ['#7c3aed', '#db2777'],
   },
   {
     id: 'maha-gen-bank',
+    metric: { value: '10k+', label: 'Research records explored' },
     name: 'Maha Gen Bank',
     tagline: 'Government research data platform',
     year: '2021–26',
@@ -182,7 +176,6 @@ export const projects: Project[] = [
     approach:
       'Built a government data-visualisation platform with interactive Leaflet.js maps, dynamic charts and advanced filtering.',
     result: '10,000+ research records explorable by map, chart and filter.',
-    title: 'Maha Gen Bank Platform',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
     description:
@@ -194,6 +187,5 @@ export const projects: Project[] = [
       'Coverage across 10,000+ plant science research records',
     ],
     technologies: ['Leaflet.js', 'JavaScript', '.NET', 'SQL Server'],
-    gradient: ['#059669', '#0ea5e9'],
   },
 ];

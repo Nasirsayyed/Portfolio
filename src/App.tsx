@@ -16,7 +16,7 @@ import { Preloader } from '@/components/boot/Preloader';
 import { About } from '@/components/about/About';
 import { Experience } from '@/components/experience/Experience';
 import { Stack } from '@/components/stack/Stack';
-import { ProjectsGrid } from '@/components/projects/ProjectsGrid';
+import { Work } from '@/components/work/Work';
 import { Achievements } from '@/components/achievements/Achievements';
 import { Education } from '@/components/education/Education';
 import { Contact } from '@/components/contact/Contact';
@@ -64,9 +64,7 @@ export default function App() {
         <About />
         <Stack />
         <Experience />
-        <Chapter id="work">
-          <ProjectsGrid />
-        </Chapter>
+        <Work />
         <Chapter id="proof">
           <Achievements />
           <Education />

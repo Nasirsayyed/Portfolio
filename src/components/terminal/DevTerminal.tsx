@@ -38,7 +38,7 @@ function runCommand(input: string, reduceMotion: boolean): string | null {
     case 'skills':
       return skills.map((s) => s.name).join(', ');
     case 'projects':
-      return projects.map((p) => `- ${p.title}`).join('\n');
+      return projects.map((p) => `- ${p.name} — ${p.tagline} (${p.year})`).join('\n');
     case 'contact':
       return `${personalInfo.email}  |  ${personalInfo.phone}  |  ${personalInfo.location}`;
     case 'resume': {

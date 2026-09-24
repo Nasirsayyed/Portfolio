@@ -78,7 +78,8 @@ export interface Project {
   name: string;
   /** One-line descriptor, e.g. "Warehouse Management SaaS". */
   tagline: string;
-  title: string;
+  /** Headline figure for the cover, taken from the résumé. */
+  metric: { value: string; label: string };
   /** Display year or range for the index row. */
   year: string;
   featured?: boolean;
@@ -93,7 +94,6 @@ export interface Project {
   features: string[];
   technologies: string[];
   outcome?: string;
-  gradient: [string, string];
 }
 
 export interface Achievement {
