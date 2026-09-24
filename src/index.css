@@ -2,29 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #f7fafc;
-  --foreground: #0f172a;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --secondary: #e0f2fe;
-  --secondary-foreground: #0c4a6e;
-  --accent: #0891b2;
-  --accent-foreground: #ffffff;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --border: #e2e8f0;
-  --muted: #eef2f7;
-  --muted-foreground: #5b6b82;
-  --gradient-start: #2563eb;
-  --gradient-end: #22d3ee;
-  --glow: rgba(37, 99, 235, 0.35);
-  --radius: 12px;
-  color-scheme: light;
+/*
+ * Metric-matched fallbacks (generated with Capsize from the real font files):
+ * text set in a system font while the webfont loads occupies the same box,
+ * so the swap causes no layout shift.
+ */
+@font-face {
+  font-family: 'Instrument Serif Fallback';
+  src: local('Times New Roman'), local('TimesNewRomanPSMT');
+  ascent-override: 117.9435%;
+  descent-override: 36.9318%;
+  line-gap-override: 0%;
+  size-adjust: 83.9385%;
+}
+@font-face {
+  font-family: 'Geist Variable Fallback';
+  src: local('Arial'), local('ArialMT');
+  ascent-override: 95.9379%;
+  descent-override: 28.1609%;
+  line-gap-override: 0%;
+  size-adjust: 104.7553%;
+}
+@font-face {
+  font-family: 'Geist Mono Variable Fallback';
+  src: local('Courier New'), local('CourierNewPSMT');
+  ascent-override: 100.5164%;
+  descent-override: 29.5048%;
+  size-adjust: 99.9837%;
 }
 
-:root.dark {
+/* Signal (dark) until applyTheme writes the active preset. */
+:root {
+  --background: #0a0a0b;
+  --foreground: #ededed;
+  --primary: #c6ff3d;
+  --primary-foreground: #0a0a0b;
+  --secondary: #18181b;
+  --secondary-foreground: #ededed;
+  --accent: #c6ff3d;
+  --accent-foreground: #0a0a0b;
+  --card: #111113;
+  --card-foreground: #ededed;
+  --border: rgba(255, 255, 255, 0.08);
+  --muted: #18181b;
+  --muted-foreground: #8a8a8f;
+  --gradient-start: #c6ff3d;
+  --gradient-end: #c6ff3d;
+  --glow: rgba(198, 255, 61, 0.35);
+  --radius: 6px;
+  --ease-signal: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
+}
+:root:not(.dark) {
+  color-scheme: light;
 }
 
 * {
@@ -32,23 +62,60 @@
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  transition: background-color 200ms ease, color 200ms ease;
+  font-family: theme('fontFamily.sans');
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 300ms var(--ease-signal),
+    color 300ms var(--ease-signal);
 }
 
 ::selection {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 
-/* Reduced motion: user preference OR OS-level prefers-reduced-motion */
+/* Designed-in focus: accent outline with offset, on everything keyboard-focusable. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------- Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------- Cursor */
+/* The custom cursor replaces the pointer on non-text UI only. Inputs always
+   keep the native caret/pointer so typing and selection are never obscured. */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none;
+}
+html.has-cursor :is(input, textarea, select, [contenteditable='true'], [contenteditable='']) {
+  cursor: auto;
+}
+
+/* --------------------------------------------------------- Reduced motion */
 :root[data-motion='reduced'] *,
 :root[data-motion='reduced'] *::before,
 :root[data-motion='reduced'] *::after {
@@ -59,79 +126,77 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------ Hero char reveal */
+/* Characters only start hidden once the hero is armed; if JS never arms it
+   (or motion is reduced) the name simply renders. */
+@keyframes char-rise {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+[data-reveal='armed'] .char {
+  transform: translate3d(0, 108%, 0);
+}
+[data-reveal='play'] .char {
+  animation: char-rise 1.1s var(--ease-signal) both;
+  animation-delay: calc(var(--i, 0) * 38ms + var(--delay, 0ms));
+}
+
+@layer components {
+  /* Mono metadata: chapter numbers, dates, labels. */
+  .label {
+    font-family: theme('fontFamily.mono');
+    font-size: theme('fontSize.label[0]');
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* A line of text that reveals by sliding up from behind its own clip. */
+  .mask {
+    display: inline-block;
+    overflow: clip;
+    vertical-align: top;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  .hairline {
+    border-color: var(--border);
   }
 }
 
 @layer utilities {
+  /* Kept for the retained palette/drawer components: in v3 "brand" is the single accent. */
   .text-gradient-brand {
-    background-image: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--accent);
   }
-
   .bg-gradient-brand {
-    background-image: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    background-color: var(--accent);
+    color: var(--accent-foreground);
   }
-
   .glass {
-    background-color: color-mix(in srgb, var(--card) 72%, transparent);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-  }
-
-  .dot-grid {
-    background-image: radial-gradient(color-mix(in srgb, var(--foreground) 14%, transparent) 1px, transparent 1px);
-    background-size: 26px 26px;
-  }
-
-  /* --- 3D --- */
-  .preserve-3d {
-    transform-style: preserve-3d;
-  }
-  .backface-hidden {
-    backface-visibility: hidden;
-  }
-  /* Layers that float above a TiltCard's face and parallax against it. */
-  .depth-1 {
-    transform: translateZ(20px);
-  }
-  .depth-2 {
-    transform: translateZ(40px);
-  }
-  .depth-3 {
-    transform: translateZ(64px);
-  }
-  /* Stacked shadows read as an extruded, slightly lifted headline. */
-  .text-3d {
-    text-shadow:
-      0 1px 0 color-mix(in srgb, var(--primary) 22%, transparent),
-      0 2px 0 color-mix(in srgb, var(--primary) 16%, transparent),
-      0 3px 0 color-mix(in srgb, var(--primary) 10%, transparent),
-      0 14px 28px color-mix(in srgb, var(--foreground) 14%, transparent);
-  }
-  .text-3d-glow {
-    filter: drop-shadow(0 8px 22px var(--glow));
-  }
-
-  .focus-ring {
-    outline: none;
+    background-color: color-mix(in srgb, var(--card) 88%, transparent);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
   }
   .focus-ring:focus-visible {
-    outline: 2px solid var(--primary);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
-    border-radius: 6px;
   }
-
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
@@ -139,17 +204,49 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
+/* ------------------------------------------------------- Grain + vignette */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root:not(.dark) .grain {
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+}
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 59;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, var(--background) 70%, black) 130%);
+  opacity: 0.55;
+}
+:root:not(.dark) .vignette {
+  opacity: 0.25;
+}
+
+/* ------------------------------------------------------------ Skip link */
 .skip-link {
   position: fixed;
   top: -100px;
   left: 1rem;
   z-index: 100;
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--accent);
+  color: var(--accent-foreground);
   padding: 0.75rem 1.25rem;
-  border-radius: var(--radius);
+  font-family: theme('fontFamily.mono');
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   transition: top 150ms ease;
 }
 .skip-link:focus {

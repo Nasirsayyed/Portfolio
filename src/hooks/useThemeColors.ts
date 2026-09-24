@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 
 export interface ThemeColors {
-  primary: string;
   accent: string;
-  gradientStart: string;
-  gradientEnd: string;
   foreground: string;
+  muted: string;
   background: string;
+  surface: string;
   isDark: boolean;
 }
 
@@ -15,12 +14,11 @@ function readColors(): ThemeColors {
   const style = getComputedStyle(root);
   const read = (name: string, fallback: string) => style.getPropertyValue(name).trim() || fallback;
   return {
-    primary: read('--primary', '#2563eb'),
-    accent: read('--accent', '#0891b2'),
-    gradientStart: read('--gradient-start', '#2563eb'),
-    gradientEnd: read('--gradient-end', '#22d3ee'),
-    foreground: read('--foreground', '#0f172a'),
-    background: read('--background', '#f7fafc'),
+    accent: read('--accent', '#c6ff3d'),
+    foreground: read('--foreground', '#ededed'),
+    muted: read('--muted-foreground', '#8a8a8f'),
+    background: read('--background', '#0a0a0b'),
+    surface: read('--card', '#111113'),
     isDark: root.classList.contains('dark'),
   };
 }
@@ -30,18 +28,21 @@ function sameColors(a: ThemeColors, b: ThemeColors): boolean {
 }
 
 /**
- * Bridges the CSS-variable theme into WebGL materials. Observes the <html>
+ * Bridges the CSS-variable theme into WebGL uniforms. Observes the <html>
  * attributes the theme engine writes rather than the store, because the
- * store changes before applyThemeToDocument has written the new variables.
+ * store changes before applyThemeToDocument has written the new variables
+ * (child effects run before the parent's), so a store subscription would
+ * read stale colours.
  */
 export function useThemeColors(): ThemeColors {
   const [colors, setColors] = useState(readColors);
 
   useEffect(() => {
-    const sync = () => setColors((prev) => {
-      const next = readColors();
-      return sameColors(prev, next) ? prev : next;
-    });
+    const sync = () =>
+      setColors((prev) => {
+        const next = readColors();
+        return sameColors(prev, next) ? prev : next;
+      });
     sync();
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, {

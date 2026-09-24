@@ -15,11 +15,18 @@ export const personalInfo: PersonalInfo = {
   location: 'Sangli, Maharashtra, India',
   email: 'nasirsayyed84@gmail.com',
   phone: '+91-8485005212',
-  availability: 'Available for Opportunities',
+  availability: 'Available for work',
+  city: 'Sangli',
+  timeZone: 'Asia/Kolkata',
+  timeZoneLabel: 'IST',
   summary:
     'Results-driven Full Stack .NET Developer with 4+ years of experience designing and delivering responsive web applications, SaaS products, microservices, and data visualization platforms. Proficient in C#, .NET Core 8, React.js 19, and SQL Server, with hands-on experience building products end-to-end — from user onboarding to payment gateway integration (Razorpay). Proven track record of automating workflows and building scalable solutions across logistics, healthcare, agriculture, and government domains.',
+  about:
+    "I'm a full-stack .NET developer who has spent four-plus years turning messy, real-world workflows into software people rely on every day. Most recently I built LogiSKU, a warehouse-management SaaS, end to end — from sign-up and onboarding to Razorpay subscription billing. Before that I shipped seven production platforms at Techlore: real-time analytics dashboards, a disease heatmap spanning 50+ countries, an adoption portal for 100+ case managers and a government research platform over 10,000+ records. I work across C#, .NET Core 8, React.js 19 and SQL Server, and I care most about the unglamorous parts — data that stays in sync, reports nobody has to build by hand, and interfaces that load fast.",
   valueProposition:
-    'I build end-to-end SaaS products and data-driven platforms with React.js and .NET Core — from onboarding and payments to real-time dashboards.',
+    'I build end-to-end SaaS products and data-heavy platforms with .NET and React — from onboarding and payments to real-time dashboards.',
+  coreStack: ['C#', '.NET Core 8', 'React.js 19', 'SQL Server'],
+  domains: ['Logistics', 'Healthcare', 'Agriculture', 'Government'],
   resumeUrl: '/resume.pdf',
   socials: [
     { label: 'Email', url: 'mailto:nasirsayyed84@gmail.com', icon: 'mail' },
@@ -31,49 +38,49 @@ export const personalInfo: PersonalInfo = {
 };
 
 export const stats: StatItem[] = [
-  { label: 'Years of Experience', value: 4, suffix: '+' },
-  { label: 'Projects Shipped', value: 8, suffix: '' },
+  { label: 'Years shipping production software', value: 4, suffix: '+' },
+  { label: 'Products shipped', value: 8, suffix: '' },
   { label: 'Companies', value: 2, suffix: '' },
-  { label: 'Domains Delivered In', value: 4, suffix: '' },
+  { label: 'Industries served', value: 4, suffix: '' },
 ];
 
 export const skills: Skill[] = [
-  { name: 'C#', category: 'Languages' },
-  { name: 'JavaScript', category: 'Languages' },
-  { name: 'SQL', category: 'Languages' },
-  { name: 'HTML5', category: 'Languages' },
-  { name: 'CSS3', category: 'Languages' },
+  { name: 'C#', category: 'Languages', layer: 'api' },
+  { name: 'JavaScript', category: 'Languages', layer: 'client' },
+  { name: 'SQL', category: 'Languages', layer: 'data' },
+  { name: 'HTML5', category: 'Languages', layer: 'client' },
+  { name: 'CSS3', category: 'Languages', layer: 'client' },
 
-  { name: '.NET Core 8', category: 'Frameworks' },
-  { name: 'ASP.NET MVC', category: 'Frameworks' },
-  { name: 'React.js 19', category: 'Frameworks' },
-  { name: 'AngularJS', category: 'Frameworks' },
-  { name: 'ADO.NET', category: 'Frameworks' },
-  { name: 'Entity Framework', category: 'Frameworks' },
+  { name: '.NET Core 8', category: 'Frameworks', layer: 'api' },
+  { name: 'ASP.NET MVC', category: 'Frameworks', layer: 'api' },
+  { name: 'React.js 19', category: 'Frameworks', layer: 'client' },
+  { name: 'AngularJS', category: 'Frameworks', layer: 'client' },
+  { name: 'ADO.NET', category: 'Frameworks', layer: 'data' },
+  { name: 'Entity Framework', category: 'Frameworks', layer: 'data' },
 
-  { name: 'jQuery', category: 'Front-End' },
-  { name: 'Bootstrap', category: 'Front-End' },
-  { name: 'JQWidgets', category: 'Front-End' },
-  { name: 'ECharts.js', category: 'Front-End' },
-  { name: 'Leaflet.js', category: 'Front-End' },
+  { name: 'jQuery', category: 'Front-End', layer: 'client' },
+  { name: 'Bootstrap', category: 'Front-End', layer: 'client' },
+  { name: 'JQWidgets', category: 'Front-End', layer: 'client' },
+  { name: 'ECharts.js', category: 'Front-End', layer: 'client' },
+  { name: 'Leaflet.js', category: 'Front-End', layer: 'client' },
 
-  { name: 'REST API / Web API', category: 'APIs & Integration' },
-  { name: 'Razorpay', category: 'APIs & Integration' },
-  { name: 'AJAX', category: 'APIs & Integration' },
-  { name: 'JSON', category: 'APIs & Integration' },
+  { name: 'REST API / Web API', category: 'APIs & Integration', layer: 'api' },
+  { name: 'Razorpay', category: 'APIs & Integration', layer: 'api' },
+  { name: 'AJAX', category: 'APIs & Integration', layer: 'client' },
+  { name: 'JSON', category: 'APIs & Integration', layer: 'api' },
 
-  { name: 'MS SQL Server', category: 'Databases' },
+  { name: 'MS SQL Server', category: 'Databases', layer: 'data' },
 
-  { name: 'Visual Studio 2022', category: 'Tools' },
-  { name: 'Git', category: 'Tools' },
-  { name: 'Postman', category: 'Tools' },
-  { name: 'SSMS', category: 'Tools' },
+  { name: 'Visual Studio 2022', category: 'Tools', layer: 'tooling' },
+  { name: 'Git', category: 'Tools', layer: 'tooling' },
+  { name: 'Postman', category: 'Tools', layer: 'tooling' },
+  { name: 'SSMS', category: 'Tools', layer: 'tooling' },
 
-  { name: 'Agile / Scrum', category: 'Practices' },
-  { name: 'Microservices', category: 'Practices' },
-  { name: 'MVC', category: 'Practices' },
+  { name: 'Agile / Scrum', category: 'Practices', layer: 'tooling' },
+  { name: 'Microservices', category: 'Practices', layer: 'api' },
+  { name: 'MVC', category: 'Practices', layer: 'api' },
 
-  { name: 'Azure (Fundamentals)', category: 'Cloud' },
+  { name: 'Azure (Fundamentals)', category: 'Cloud', layer: 'tooling' },
 ];
 
 export const achievements: Achievement[] = [

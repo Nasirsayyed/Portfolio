@@ -41,7 +41,7 @@ function SegmentGroup<T extends string>({
 }) {
   return (
     <div>
-      <h3 className="mb-3 text-sm font-semibold text-foreground">{label}</h3>
+      <h3 className="label mb-3 text-muted-foreground">{label}</h3>
       <div className="grid grid-cols-3 gap-2">
         {options.map((option) => (
           <button
@@ -49,10 +49,10 @@ function SegmentGroup<T extends string>({
             type="button"
             onClick={() => onChange(option.key)}
             aria-pressed={value === option.key}
-            className={`focus-ring rounded-lg border px-2 py-2.5 text-xs font-medium transition-colors ${
+            className={`focus-ring rounded-md border px-2 py-2.5 text-xs font-medium transition-colors ${
               value === option.key
-                ? 'border-primary/50 bg-secondary text-primary'
-                : 'border-border text-muted-foreground hover:text-foreground'
+                ? 'border-accent/60 bg-accent/10 text-accent'
+                : 'border-foreground/15 text-muted-foreground hover:text-foreground'
             }`}
           >
             {option.label}
@@ -80,10 +80,10 @@ export function ThemeCustomizer() {
   const reset = useThemeStore((s) => s.reset);
 
   return (
-    <Drawer open={open} onClose={() => setOpen(false)} title="Customize">
+    <Drawer open={open} onClose={() => setOpen(false)} title="Appearance" eyebrow="Settings">
       <div className="flex flex-col gap-8">
         <div>
-          <h3 className="mb-3 text-sm font-semibold text-foreground">Appearance</h3>
+          <h3 className="label mb-3 text-muted-foreground">Mode</h3>
           <div className="grid grid-cols-3 gap-2">
             {appearanceOptions.map((option) => {
               const Icon = option.icon;
@@ -93,10 +93,10 @@ export function ThemeCustomizer() {
                   type="button"
                   onClick={() => setAppearance(option.key)}
                   aria-pressed={appearance === option.key}
-                  className={`focus-ring flex flex-col items-center gap-1.5 rounded-lg border px-2 py-3 text-xs font-medium transition-colors ${
+                  className={`focus-ring flex flex-col items-center gap-1.5 rounded-md border px-2 py-3 text-xs font-medium transition-colors ${
                     appearance === option.key
-                      ? 'border-primary/50 bg-secondary text-primary'
-                      : 'border-border text-muted-foreground hover:text-foreground'
+                      ? 'border-accent/60 bg-accent/10 text-accent'
+                      : 'border-foreground/15 text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   <Icon className="h-4 w-4" aria-hidden="true" />
@@ -108,7 +108,7 @@ export function ThemeCustomizer() {
         </div>
 
         <div>
-          <h3 className="mb-3 text-sm font-semibold text-foreground">Theme Preset</h3>
+          <h3 className="label mb-3 text-muted-foreground">Preset</h3>
           <div className="grid grid-cols-2 gap-3">
             {themePresets.map((themePreset) => (
               <button
@@ -116,18 +116,18 @@ export function ThemeCustomizer() {
                 type="button"
                 onClick={() => setPreset(themePreset.key)}
                 aria-pressed={preset === themePreset.key}
-                className={`focus-ring group relative flex flex-col gap-2 overflow-hidden rounded-lg border p-3 text-left transition-colors ${
-                  preset === themePreset.key ? 'border-primary/60' : 'border-border hover:border-primary/30'
+                className={`focus-ring group relative flex flex-col gap-2 overflow-hidden rounded-md border p-3 text-left transition-colors ${
+                  preset === themePreset.key ? 'border-accent/70' : 'border-foreground/15 hover:border-foreground/40'
                 }`}
               >
                 <span
-                  className="block h-10 w-full rounded-md"
+                  className="block h-10 w-full rounded-sm"
                   style={{ backgroundImage: themePreset.swatch }}
                   aria-hidden="true"
                 />
                 <span className="flex items-center justify-between text-xs font-semibold text-foreground">
                   {themePreset.name}
-                  {preset === themePreset.key ? <Check className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> : null}
+                  {preset === themePreset.key ? <Check className="h-3.5 w-3.5 text-accent" aria-hidden="true" /> : null}
                 </span>
                 <span className="text-[11px] leading-snug text-muted-foreground">{themePreset.description}</span>
               </button>
@@ -142,7 +142,7 @@ export function ThemeCustomizer() {
         <button
           type="button"
           onClick={reset}
-          className="focus-ring flex items-center justify-center gap-2 rounded-lg border border-border py-3 text-sm font-medium text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+          className="focus-ring flex items-center justify-center gap-2 label rounded-md border border-foreground/15 py-3 text-muted-foreground transition hover:border-foreground/40 hover:text-foreground"
         >
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
           Reset to Default

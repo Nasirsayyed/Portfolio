@@ -1,48 +1,48 @@
 import type { Config } from 'tailwindcss';
 
+/**
+ * Theme colours are CSS variables holding hex/rgba values. Wrapping them in
+ * color-mix with Tailwind's <alpha-value> placeholder makes opacity modifiers
+ * (`bg-accent/10`, `border-foreground/20`) work — a bare `var(--x)` silently
+ * generates no rule for them.
+ */
+const token = (name: string) => `color-mix(in srgb, var(--${name}) calc(<alpha-value> * 100%), transparent)`;
+
 export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     container: {
       center: true,
-      padding: '1.25rem',
-      screens: {
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1180px',
-        '2xl': '1280px',
-      },
+      padding: { DEFAULT: '1.25rem', sm: '2rem', lg: '3rem' },
+      // Content caps at 1280px so wide screens keep a gutter for the chapter index.
+      screens: { sm: '640px', md: '768px', lg: '1024px', xl: '1280px' },
     },
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        primary: {
-          DEFAULT: 'var(--primary)',
-          foreground: 'var(--primary-foreground)',
-        },
-        secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
-        },
-        accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
-        },
-        card: {
-          DEFAULT: 'var(--card)',
-          foreground: 'var(--card-foreground)',
-        },
+        background: token('background'),
+        foreground: token('foreground'),
+        primary: { DEFAULT: token('primary'), foreground: token('primary-foreground') },
+        secondary: { DEFAULT: token('secondary'), foreground: token('secondary-foreground') },
+        accent: { DEFAULT: token('accent'), foreground: token('accent-foreground') },
+        card: { DEFAULT: token('card'), foreground: token('card-foreground') },
+        muted: { DEFAULT: token('muted'), foreground: token('muted-foreground') },
         border: 'var(--border)',
-        muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
-        },
-        'gradient-start': 'var(--gradient-start)',
-        'gradient-end': 'var(--gradient-end)',
+        line: 'var(--border)',
         glow: 'var(--glow)',
+      },
+      fontFamily: {
+        sans: ['"Geist Variable"', '"Geist Variable Fallback"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Instrument Serif"', '"Instrument Serif Fallback"', 'ui-serif', 'Georgia', 'serif'],
+        mono: ['"Geist Mono Variable"', '"Geist Mono Variable Fallback"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
+      fontSize: {
+        // Fluid scale. `mega` is the hero name; `giga` the Connect headline.
+        label: ['clamp(0.66rem, 0.62rem + 0.15vw, 0.75rem)', { lineHeight: '1.4', letterSpacing: '0.12em' }],
+        lead: ['clamp(1.05rem, 0.98rem + 0.35vw, 1.3rem)', { lineHeight: '1.6' }],
+        'display-sm': ['clamp(2rem, 1.4rem + 2.6vw, 3.5rem)', { lineHeight: '1', letterSpacing: '-0.03em' }],
+        'display-md': ['clamp(2.75rem, 1.6rem + 5vw, 6rem)', { lineHeight: '0.95', letterSpacing: '-0.04em' }],
+        mega: ['clamp(3.5rem, 11vw, 11rem)', { lineHeight: '0.86', letterSpacing: '-0.04em' }],
       },
       borderRadius: {
         sm: 'calc(var(--radius) - 6px)',
@@ -52,48 +52,39 @@ export default {
         xl: 'calc(var(--radius) + 6px)',
         '2xl': 'calc(var(--radius) + 14px)',
       },
-      fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      transitionTimingFunction: {
+        signal: 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
       boxShadow: {
-        glow: '0 0 0 1px var(--border), 0 8px 30px -8px var(--glow)',
-        card: '0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.15)',
+        glow: '0 0 0 1px var(--border), 0 18px 60px -20px var(--glow)',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-12px)' },
+        marquee: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-50%)' } },
+        'marquee-reverse': { from: { transform: 'translateX(-50%)' }, to: { transform: 'translateX(0)' } },
+        grain: {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '20%': { transform: 'translate(-5%, 3%)' },
+          '40%': { transform: 'translate(4%, -6%)' },
+          '60%': { transform: 'translate(-3%, 5%)' },
+          '80%': { transform: 'translate(6%, -2%)' },
         },
-        'spin-slow': {
-          from: { transform: 'rotate(0deg)' },
-          to: { transform: 'rotate(360deg)' },
+        'scroll-cue': {
+          '0%': { transform: 'scaleY(0)', transformOrigin: 'top' },
+          '45%': { transform: 'scaleY(1)', transformOrigin: 'top' },
+          '55%': { transform: 'scaleY(1)', transformOrigin: 'bottom' },
+          '100%': { transform: 'scaleY(0)', transformOrigin: 'bottom' },
         },
-        'spin-slow-reverse': {
-          from: { transform: 'rotate(360deg)' },
-          to: { transform: 'rotate(0deg)' },
-        },
-        blob: {
-          '0%, 100%': { transform: 'translate(0px, 0px) scale(1)' },
-          '33%': { transform: 'translate(20px, -30px) scale(1.05)' },
-          '66%': { transform: 'translate(-15px, 15px) scale(0.97)' },
-        },
-        marquee: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-        'spin-cube': {
-          from: { transform: 'rotateX(-24deg) rotateY(0deg)' },
-          to: { transform: 'rotateX(-24deg) rotateY(360deg)' },
+        'pulse-dot': {
+          '0%': { transform: 'scale(1)', opacity: '0.7' },
+          '100%': { transform: 'scale(2.8)', opacity: '0' },
         },
       },
       animation: {
-        float: 'float 6s ease-in-out infinite',
-        'spin-slow': 'spin-slow 18s linear infinite',
-        'spin-slow-reverse': 'spin-slow-reverse 22s linear infinite',
-        blob: 'blob 12s ease-in-out infinite',
-        marquee: 'marquee 28s linear infinite',
-        'spin-cube': 'spin-cube 6s linear infinite',
+        marquee: 'marquee 38s linear infinite',
+        'marquee-reverse': 'marquee-reverse 42s linear infinite',
+        grain: 'grain 1s steps(4) infinite',
+        'scroll-cue': 'scroll-cue 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite',
+        'pulse-dot': 'pulse-dot 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite',
       },
     },
   },

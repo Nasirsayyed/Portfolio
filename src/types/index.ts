@@ -13,8 +13,19 @@ export interface PersonalInfo {
   email: string;
   phone: string;
   availability: string;
+  /** Short place name for the live availability chip. */
+  city: string;
+  /** IANA zone + label for the live local clock. */
+  timeZone: string;
+  timeZoneLabel: string;
   summary: string;
+  /** First-person editorial paragraph for the About chapter. */
+  about: string;
   valueProposition: string;
+  /** Core technologies for the hero's mono role line. */
+  coreStack: string[];
+  /** Industries delivered into. */
+  domains: string[];
   resumeUrl: string;
   socials: SocialLink[];
 }
@@ -33,6 +44,8 @@ export interface ExperienceEntry {
   location?: string;
   current: boolean;
   summary: string;
+  /** 3–4 headline outcomes for the experience panel. */
+  impact: string[];
   highlights: string[];
   technologies: string[];
 }
@@ -47,14 +60,29 @@ export type SkillCategory =
   | 'Practices'
   | 'Cloud';
 
+/** Where a skill sits in the Client / API / Data architecture of the Stack chapter. */
+export type StackLayer = 'client' | 'api' | 'data' | 'tooling';
+
 export interface Skill {
   name: string;
   category: SkillCategory;
+  layer: StackLayer;
 }
 
 export interface Project {
   id: string;
+  /** Short name used in the index, e.g. "LogiSKU". */
+  name: string;
+  /** One-line descriptor, e.g. "Warehouse Management SaaS". */
+  tagline: string;
   title: string;
+  /** Display year or range for the index row. */
+  year: string;
+  featured?: boolean;
+  /** Case study narrative. */
+  problem: string;
+  approach: string;
+  result: string;
   company: string;
   period: string;
   description: string;
@@ -86,7 +114,7 @@ export interface Certification {
 }
 
 export type AppearanceMode = 'light' | 'dark' | 'system';
-export type ThemePresetKey = 'ocean' | 'royal' | 'emerald' | 'sunset' | 'monochrome' | 'cyber';
+export type ThemePresetKey = 'signal' | 'ocean' | 'royal' | 'emerald' | 'sunset' | 'monochrome' | 'cyber';
 export type RadiusKey = 'sharp' | 'rounded' | 'extra-rounded';
 export type MotionKey = 'full' | 'reduced';
 export type FontSizeKey = 'compact' | 'default' | 'comfortable';

@@ -3,6 +3,15 @@ import type { Project } from '@/types';
 export const projects: Project[] = [
   {
     id: 'logisku',
+    name: 'LogiSKU',
+    tagline: 'Warehouse Management SaaS',
+    year: '2026',
+    featured: true,
+    problem:
+      'Turn a warehouse-management product into a self-serve SaaS: customers had to be able to sign up, get onboarded and pay for a subscription on their own.',
+    approach:
+      'Built the product end to end on React.js 19 and .NET Core 8, owning every step of the user journey, and integrated the Razorpay gateway for subscription billing.',
+    result: 'A complete SaaS flow — sign-up, onboarding, and secure, automated subscription payments with a seamless checkout.',
     title: 'LogiSKU — WMS SaaS Platform',
     company: 'Simulytics Tech Private Limited',
     period: 'April 2026 – Present',
@@ -19,6 +28,14 @@ export const projects: Project[] = [
   },
   {
     id: 'rb-dashboard',
+    name: 'RB Dashboard',
+    tagline: 'Real-time analytics dashboard',
+    year: '2021–26',
+    problem:
+      'One analytics dashboard had to serve different roles from a single codebase, and it was slow to load.',
+    approach:
+      'Architected it on ECharts.js and JQWidgets (.NET) with database-driven menus, role-based access control and modular iframe rendering.',
+    result: 'Real-time, responsive analytics with 30% faster dashboard load times.',
     title: 'RB Dashboard',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
@@ -36,6 +53,14 @@ export const projects: Project[] = [
   },
   {
     id: 'workflow-automation',
+    name: 'Workflow Automation',
+    tagline: 'Scheduled reporting engine',
+    year: '2021–26',
+    problem:
+      'Recurring reports were compiled and emailed by hand, costing 6+ hours every week.',
+    approach:
+      'Built scheduled console applications that trigger stored procedures, generate Excel reports and email them automatically.',
+    result: '6+ hours a week of manual reporting eliminated.',
     title: 'Workflow Automation Suite',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
@@ -52,6 +77,14 @@ export const projects: Project[] = [
   },
   {
     id: 'sofosh-hsr',
+    name: 'Sofosh HSR Portal',
+    tagline: 'Adoption case management',
+    year: '2021–26',
+    problem:
+      'Case managers needed one place to run adoption cases — records, documents, reminders and follow-up after placement.',
+    approach:
+      'Developed a full-stack React.js + .NET Core app with CRUD workflows, file uploads, email reminders and post-placement tracking.',
+    result: 'A mobile-responsive portal serving 100+ case managers.',
     title: 'Sofosh HSR Portal',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
@@ -69,6 +102,14 @@ export const projects: Project[] = [
   },
   {
     id: 'valneva-heatmap',
+    name: 'Valneva Heatmap',
+    tagline: 'Global disease surveillance map',
+    year: '2021–26',
+    problem:
+      'Daily disease data arriving from external APIs had to become something people could explore geographically.',
+    approach:
+      'Engineered a .NET Core microservice that ingests and persists the daily records, feeding an interactive Leaflet.js heatmap.',
+    result: 'Global case distribution visualised across 50+ countries.',
     title: 'Valneva Disease Heatmap',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
@@ -85,6 +126,14 @@ export const projects: Project[] = [
   },
   {
     id: 'emo-wms',
+    name: 'EMO WMS',
+    tagline: 'Warehouse operations front end',
+    year: '2021–26',
+    problem:
+      'Warehouse staff needed to find and act on live operational data quickly.',
+    approach:
+      'Built front-end modules in JavaScript, AJAX and JSON with dynamic grid filtering and real-time data rendering.',
+    result: 'Streamlined day-to-day operations for 20+ warehouse staff.',
     title: 'EMO Warehouse Management System',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
@@ -101,6 +150,14 @@ export const projects: Project[] = [
   },
   {
     id: 'buktec-middleware',
+    name: 'BukTec Middleware',
+    tagline: 'ERP ↔ web sync',
+    year: '2021–26',
+    problem:
+      "Data was re-keyed by hand between Tally ERP and BukTec's web platform, and the two drifted out of sync.",
+    approach:
+      'Designed a desktop middleware application that syncs data in both directions between Tally ERP and the BukTec Web APIs.',
+    result: '80% less manual data entry and no more sync errors.',
     title: 'BukTec Desktop Middleware',
     company: 'Techlore',
     period: 'November 2021 – March 2026',
@@ -117,6 +174,14 @@ export const projects: Project[] = [
   },
   {
     id: 'maha-gen-bank',
+    name: 'Maha Gen Bank',
+    tagline: 'Government research data platform',
+    year: '2021–26',
+    problem:
+      "Maharashtra's agricultural scientists had 10,000+ plant-science research records but no easy way to explore them.",
+    approach:
+      'Built a government data-visualisation platform with interactive Leaflet.js maps, dynamic charts and advanced filtering.',
+    result: '10,000+ research records explorable by map, chart and filter.',
     title: 'Maha Gen Bank Platform',
     company: 'Techlore',
     period: 'November 2021 – March 2026',

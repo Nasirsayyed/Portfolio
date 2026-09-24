@@ -5,6 +5,7 @@ import { personalInfo, skills } from '@/data/portfolio';
 import { experience } from '@/data/experience';
 import { projects } from '@/data/projects';
 import { scrollToSection } from '@/utils/scroll';
+import { chapters } from '@/data/navigation';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface LogLine {
@@ -52,7 +53,7 @@ function runCommand(input: string, reduceMotion: boolean): string | null {
     case '':
       return '';
     default:
-      if (['home', 'about', 'experience', 'skills', 'projects', 'education', 'contact'].includes(cmd)) {
+      if (chapters.some((chapter) => chapter.id === cmd)) {
         scrollToSection(cmd, reduceMotion);
         return `Navigating to ${cmd}...`;
       }

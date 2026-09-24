@@ -4,11 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Self-hosted fonts (@fontsource). Only the hero's display face and body face are
+         preloaded; Vite fingerprints these to the same files the @font-face rules use. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2"
     />
 
     <title>Nasirahmed Sayyed | Full Stack .NET Developer</title>
@@ -17,7 +27,7 @@
       content="Nasirahmed Sayyed — Full Stack .NET Developer with 4+ years building React.js and .NET Core SaaS products, enterprise dashboards, and data visualization platforms."
     />
     <meta name="author" content="Nasirahmed Sayyed" />
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" content="#0A0A0B" />
     <link rel="canonical" href="https://nasirahmedsayyed.vercel.app/" />
 
     <meta property="og:type" content="website" />
@@ -64,36 +74,33 @@
     <script>
       (function () {
         try {
-          var darkBg = {
-            ocean: '#070c17',
-            royal: '#0b0817',
-            emerald: '#061412',
-            sunset: '#150907',
-            monochrome: '#0a0a0b',
-            cyber: '#05050a',
-          };
-          var darkFg = {
-            ocean: '#e8edf7',
-            royal: '#ece9f9',
-            emerald: '#e4f5ee',
-            sunset: '#fbe9e1',
-            monochrome: '#f4f4f5',
-            cyber: '#e9e8fb',
+          // Mirrors src/data/themePresets.ts so the first paint already has the right ground.
+          var grounds = {
+            signal: ['#0A0A0B', '#F4F2EE'],
+            ocean: ['#07090C', '#F1F4F6'],
+            royal: ['#0A090D', '#F3F1F6'],
+            emerald: ['#070B09', '#F0F4F1'],
+            sunset: ['#0C0908', '#F6F1EC'],
+            monochrome: ['#0A0A0A', '#F4F4F2'],
+            cyber: ['#050608', '#EFF4F5'],
           };
           var raw = localStorage.getItem('portfolio-theme');
-          var state = raw ? JSON.parse(raw).state : null;
-          var appearance = (state && state.appearance) || 'system';
-          var preset = (state && state.preset) || 'ocean';
+          var saved = raw ? JSON.parse(raw) : null;
+          var state = saved && saved.state ? saved.state : null;
+          // Pre-v3 saves (version 0) are migrated to Signal + dark by the store; match that here.
+          var legacy = !saved || !saved.version;
+          var preset = !legacy && state && grounds[state.preset] ? state.preset : 'signal';
+          var appearance = state && state.appearance ? state.appearance : 'dark';
+          if (legacy && appearance === 'system') appearance = 'dark';
           var isDark =
             appearance === 'dark' ||
-            (appearance === 'system' &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches);
-          if (isDark) {
-            document.documentElement.classList.add('dark');
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.documentElement.style.setProperty('--background', darkBg[preset] || darkBg.ocean);
-            document.documentElement.style.setProperty('--foreground', darkFg[preset] || darkFg.ocean);
-          }
+            (appearance === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var root = document.documentElement;
+          root.classList.toggle('dark', isDark);
+          root.setAttribute('data-theme', isDark ? 'dark' : 'light');
+          root.style.setProperty('--background', grounds[preset][isDark ? 0 : 1]);
+          root.style.setProperty('--foreground', isDark ? '#EDEDED' : '#0A0A0B');
+          if (sessionStorage.getItem('v3-booted')) root.setAttribute('data-booted', '');
         } catch (e) {}
       })();
     </script>

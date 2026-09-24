@@ -10,6 +10,11 @@ export const experience: ExperienceEntry[] = [
     current: true,
     summary:
       'Building LogiSKU, a Warehouse Management SaaS platform, end-to-end — from the user journey and onboarding through subscription billing and payments.',
+    impact: [
+      'Built LogiSKU, a warehouse-management SaaS, end to end on React.js 19 and .NET Core 8.',
+      'Owned the full user journey — sign-up, onboarding and subscription billing.',
+      'Integrated Razorpay for secure, automated subscription payments and checkout.',
+    ],
     highlights: [
       'Built the LogiSKU Warehouse Management SaaS product end-to-end using React.js 19 and .NET Core 8, owning the full user journey from sign-up and onboarding to subscription billing.',
       'Integrated the Razorpay payment gateway to enable secure, automated subscription payments and seamless checkout.',
@@ -25,6 +30,12 @@ export const experience: ExperienceEntry[] = [
     current: false,
     summary:
       'Delivered 7 production platforms across analytics, healthcare, agriculture, logistics, and ERP integration — spanning dashboards, automation, and geospatial data visualization.',
+    impact: [
+      'Shipped seven production platforms across analytics, healthcare, agriculture, logistics and ERP integration.',
+      'Cut dashboard load time by 30% with modular iframe rendering.',
+      'Automated scheduled reporting, removing 6+ hours a week of manual work.',
+      'Reduced manual data entry by 80% with a Tally ERP ↔ web API sync middleware.',
+    ],
     highlights: [
       'RB Dashboard: Architected a real-time responsive analytics dashboard using ECharts.js and JQWidgets (.NET), with dynamic database-driven menu rendering and role-based access control, reducing dashboard load time by 30% through modular iframe rendering.',
       'Workflow Automation: Built automated console applications that schedule email notifications with Excel report attachments and trigger stored DB procedures, eliminating 6+ hours/week of manual reporting effort.',

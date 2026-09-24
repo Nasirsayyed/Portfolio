@@ -1,15 +1,15 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { lazy, Suspense } from 'react';
+import { LazyMotion } from 'framer-motion';
+import { personalInfo } from '@/data/portfolio';
 import { useApplyTheme } from '@/hooks/useApplyTheme';
-import { use3DEnabled } from '@/hooks/use3DEnabled';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useThemeStore } from '@/store/themeStore';
-import { WebGLBoundary } from '@/components/three/WebGLBoundary';
-import { LoadingScreen } from '@/components/loading/LoadingScreen';
-import { Navbar } from '@/components/layout/Navbar';
-import { ScrollProgress } from '@/components/layout/ScrollProgress';
-import { BackToTop } from '@/components/layout/BackToTop';
+import { Cursor } from '@/components/cursor/Cursor';
+import { Atmosphere, FallbackBackdrop } from '@/components/layout/Atmosphere';
+import { ChapterNav } from '@/components/layout/ChapterNav';
+import { TopBar } from '@/components/layout/TopBar';
 import { Footer } from '@/components/layout/Footer';
-import { Hero } from '@/components/hero/Hero';
+import { Chapter } from '@/components/ui/Chapter';
 import { About } from '@/components/about/About';
 import { ExperienceTimeline } from '@/components/experience/ExperienceTimeline';
 import { SkillsGrid } from '@/components/skills/SkillsGrid';
@@ -18,63 +18,61 @@ import { Achievements } from '@/components/achievements/Achievements';
 import { Education } from '@/components/education/Education';
 import { Contact } from '@/components/contact/Contact';
 import { ThemeCustomizer } from '@/components/theme/ThemeCustomizer';
-import { FloatingSettingsButton } from '@/components/theme/FloatingSettingsButton';
 import { CommandPalette } from '@/components/command-palette/CommandPalette';
 import { DevTerminal } from '@/components/terminal/DevTerminal';
-import { FloatingTerminalButton } from '@/components/terminal/FloatingTerminalButton';
 
-// three.js + R3F live in a separate chunk so the page shell stays light.
-const Scene3D = lazy(() => import('@/components/three/Scene3D'));
+// Everything motion-heavy is off the critical path.
+const MotionEngine = lazy(() => import('@/motion/MotionEngine'));
+const loadMotionFeatures = () => import('@/motion/features').then((mod) => mod.default);
 
 export default function App() {
   useApplyTheme();
   const recruiterMode = useThemeStore((s) => s.recruiterMode);
-  const enable3D = use3DEnabled();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 900);
-    return () => window.clearTimeout(timer);
-  }, []);
+  // Reduced motion already folds in Recruiter Mode.
+  const reduceMotion = useReducedMotion();
 
   return (
-    <>
-      <AnimatePresence>{loading ? <LoadingScreen /> : null}</AnimatePresence>
-
-      {enable3D && (
-        <WebGLBoundary fallback={null}>
-          <Suspense fallback={null}>
-            <Scene3D />
-          </Suspense>
-        </WebGLBoundary>
+    <LazyMotion features={loadMotionFeatures}>
+      {!recruiterMode && <Atmosphere />}
+      <FallbackBackdrop />
+      <Cursor />
+      {!reduceMotion && (
+        <Suspense fallback={null}>
+          <MotionEngine />
+        </Suspense>
       )}
 
-      <ScrollProgress />
-      <Navbar />
+      <TopBar />
+      {!recruiterMode && <ChapterNav />}
 
-      {/* overflow-x-clip: 3D reveals start rotated, and perspective can push their near
-          edge past the viewport before they swing in. clip (unlike hidden) doesn't
-          create a scroll container, so scroll anchoring and sticky UI keep working. */}
       <main id="main-content" className="overflow-x-clip">
-        <Hero />
-        {!recruiterMode && <About />}
+        <Chapter id="boot" className="flex min-h-[100svh] items-end pb-20">
+          <div className="container">
+            <h1 className="font-display text-mega">{personalInfo.name}</h1>
+          </div>
+        </Chapter>
+        <About />
+        <Chapter id="stack">
+          <SkillsGrid />
+        </Chapter>
         <ExperienceTimeline />
-        <SkillsGrid />
-        <ProjectsGrid />
-        {!recruiterMode && <Achievements />}
-        <Education />
-        <Contact />
+        <Chapter id="work">
+          <ProjectsGrid />
+        </Chapter>
+        <Chapter id="proof">
+          <Achievements />
+          <Education />
+        </Chapter>
+        <Chapter id="connect">
+          <Contact />
+        </Chapter>
       </main>
 
       <Footer />
 
-      <BackToTop />
-      <FloatingTerminalButton />
-      <FloatingSettingsButton />
-
       <ThemeCustomizer />
       <CommandPalette />
       <DevTerminal />
-    </>
+    </LazyMotion>
   );
 }

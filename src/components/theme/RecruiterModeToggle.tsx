@@ -1,7 +1,12 @@
-import { Briefcase } from 'lucide-react';
 import { useThemeStore } from '@/store/themeStore';
 
-export function RecruiterModeToggle() {
+interface RecruiterModeToggleProps {
+  /** `compact` drops the text label to fit the top bar on small screens. */
+  variant?: 'full' | 'compact';
+  className?: string;
+}
+
+export function RecruiterModeToggle({ variant = 'full', className = '' }: RecruiterModeToggleProps) {
   const recruiterMode = useThemeStore((s) => s.recruiterMode);
   const toggleRecruiterMode = useThemeStore((s) => s.toggleRecruiterMode);
 
@@ -11,23 +16,20 @@ export function RecruiterModeToggle() {
       onClick={toggleRecruiterMode}
       role="switch"
       aria-checked={recruiterMode}
-      className={`focus-ring flex h-10 items-center gap-2 rounded-full border px-3.5 text-xs font-semibold transition-colors ${
-        recruiterMode
-          ? 'border-primary/50 bg-secondary text-primary'
-          : 'border-border text-muted-foreground hover:text-foreground'
-      }`}
-      title="Recruiter Mode reorganizes the site around Experience, Skills, Projects, Resume, and Contact, and reduces decorative animation."
+      aria-label={variant === 'compact' ? 'Recruiter Mode' : undefined}
+      title="Recruiter Mode: a flat, fast, résumé-first view with no 3D or motion."
+      className={`label group inline-flex h-9 items-center gap-2.5 rounded-full border px-3 transition-colors ${
+        recruiterMode ? 'border-accent/60 text-accent' : 'border-foreground/15 text-muted-foreground hover:text-foreground'
+      } ${className}`}
     >
-      <Briefcase className="h-3.5 w-3.5" aria-hidden="true" />
-      Recruiter Mode
+      {variant === 'full' ? <span>Recruiter mode</span> : null}
       <span
-        className={`relative h-4 w-7 rounded-full transition-colors ${
-          recruiterMode ? 'bg-primary' : 'bg-muted-foreground/40'
-        }`}
+        aria-hidden="true"
+        className={`relative h-3.5 w-6 rounded-full transition-colors ${recruiterMode ? 'bg-accent' : 'bg-foreground/25'}`}
       >
         <span
-          className={`absolute left-0.5 top-0.5 h-3 w-3 rounded-full bg-white shadow-sm ring-1 ring-black/10 transition-transform ${
-            recruiterMode ? 'translate-x-3' : 'translate-x-0'
+          className={`absolute left-0.5 top-0.5 h-2.5 w-2.5 rounded-full transition-transform duration-300 ease-signal ${
+            recruiterMode ? 'translate-x-2.5 bg-accent-foreground' : 'translate-x-0 bg-background'
           }`}
         />
       </span>

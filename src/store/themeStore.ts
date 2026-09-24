@@ -21,7 +21,7 @@ export interface ThemeState {
 }
 
 const defaults = {
-  appearance: 'system' as AppearanceMode,
+  appearance: 'dark' as AppearanceMode,
   preset: defaultThemePreset,
   radius: 'rounded' as RadiusKey,
   motion: 'full' as MotionKey,
@@ -42,14 +42,31 @@ export const useThemeStore = create<ThemeState>()(
       setRecruiterMode: (value) => set({ recruiterMode: value }),
       reset: () => set({ ...defaults }),
     }),
-    { name: 'portfolio-theme' },
+    {
+      name: 'portfolio-theme',
+      // v1 = the v3 redesign. Move returning visitors onto the new Signal
+      // default once; keep an explicit light/dark choice, but an untouched
+      // "system" default becomes the new dark-first default.
+      version: 1,
+      migrate: (persisted, version) => {
+        const state = (persisted ?? {}) as Partial<ThemeState>;
+        if (version < 1) {
+          return {
+            ...state,
+            preset: defaultThemePreset,
+            appearance: state.appearance === 'system' || !state.appearance ? 'dark' : state.appearance,
+          } as ThemeState;
+        }
+        return state as ThemeState;
+      },
+    },
   ),
 );
 
 export const radiusValues: Record<RadiusKey, string> = {
-  sharp: '2px',
-  rounded: '12px',
-  'extra-rounded': '22px',
+  sharp: '0px',
+  rounded: '6px',
+  'extra-rounded': '14px',
 };
 
 export const fontSizeValues: Record<FontSizeKey, string> = {

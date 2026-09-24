@@ -1,264 +1,124 @@
-import type { ThemePreset } from '@/types';
+import type { ThemePreset, ThemePresetKey, ThemeTokens } from '@/types';
 
 /**
- * Each preset defines a full semantic token set for light and dark mode.
- * Components never reference these colors directly — they consume the
- * CSS variables (var(--primary), var(--card), ...) applied to :root by
- * the theme store, so switching presets/appearance is a single DOM write.
+ * v3 "editorial" token system. Every preset shares the same structure — ink
+ * (dark) or paper (light) grounds, one hairline, one muted grey, and a single
+ * accent — and differs only in its hue. Components never reference these
+ * values directly; they read the CSS variables applyTheme writes to :root.
+ *
+ * Light-mode accents are darkened versions of the dark-mode hue so accent
+ * text keeps >= 4.5:1 contrast on paper (a raw neon on paper is ~1:1).
  */
+
+interface Ground {
+  background: string;
+  surface: string;
+  raised: string;
+  accent: string;
+}
+
+const INK_TEXT = '#EDEDED';
+const INK_MUTED = '#8A8A8F';
+const PAPER_TEXT = '#0A0A0B';
+const PAPER_MUTED = '#5E5E63';
+
+function hexToRgba(hex: string, alpha: number): string {
+  const n = Number.parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
+
+function tokens(ground: Ground, mode: 'dark' | 'light'): ThemeTokens {
+  const dark = mode === 'dark';
+  const text = dark ? INK_TEXT : PAPER_TEXT;
+  const onAccent = dark ? '#0A0A0B' : ground.background;
+  return {
+    '--background': ground.background,
+    '--foreground': text,
+    '--primary': ground.accent,
+    '--primary-foreground': onAccent,
+    '--secondary': ground.raised,
+    '--secondary-foreground': text,
+    '--accent': ground.accent,
+    '--accent-foreground': onAccent,
+    '--card': ground.surface,
+    '--card-foreground': text,
+    '--border': dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(10, 10, 11, 0.10)',
+    '--muted': ground.raised,
+    '--muted-foreground': dark ? INK_MUTED : PAPER_MUTED,
+    // One accent only: the old two-stop gradients collapse onto it.
+    '--gradient-start': ground.accent,
+    '--gradient-end': ground.accent,
+    '--glow': hexToRgba(ground.accent, dark ? 0.35 : 0.22),
+  };
+}
+
+function preset(
+  key: ThemePresetKey,
+  name: string,
+  description: string,
+  dark: Ground,
+  light: Ground,
+): ThemePreset {
+  return {
+    key,
+    name,
+    description,
+    swatch: `linear-gradient(135deg, ${dark.background} 0 55%, ${dark.accent} 55% 100%)`,
+    dark: tokens(dark, 'dark'),
+    light: tokens(light, 'light'),
+  };
+}
+
 export const themePresets: ThemePreset[] = [
-  {
-    key: 'ocean',
-    name: 'Ocean',
-    description: 'Calm blues with a cyan accent — clean and trustworthy.',
-    swatch: 'linear-gradient(135deg, #2563eb, #22d3ee)',
-    light: {
-      '--background': '#f7fafc',
-      '--foreground': '#0f172a',
-      '--primary': '#2563eb',
-      '--primary-foreground': '#ffffff',
-      '--secondary': '#e0f2fe',
-      '--secondary-foreground': '#0c4a6e',
-      '--accent': '#0891b2',
-      '--accent-foreground': '#ffffff',
-      '--card': '#ffffff',
-      '--card-foreground': '#0f172a',
-      '--border': '#e2e8f0',
-      '--muted': '#eef2f7',
-      '--muted-foreground': '#5b6b82',
-      '--gradient-start': '#2563eb',
-      '--gradient-end': '#22d3ee',
-      '--glow': 'rgba(37, 99, 235, 0.35)',
-    },
-    dark: {
-      '--background': '#070c17',
-      '--foreground': '#e8edf7',
-      '--primary': '#3b82f6',
-      '--primary-foreground': '#03060d',
-      '--secondary': '#0f1e33',
-      '--secondary-foreground': '#bcd6f2',
-      '--accent': '#22d3ee',
-      '--accent-foreground': '#03151a',
-      '--card': '#0d1526',
-      '--card-foreground': '#e8edf7',
-      '--border': '#1c2942',
-      '--muted': '#101a2e',
-      '--muted-foreground': '#8ea0bd',
-      '--gradient-start': '#3b82f6',
-      '--gradient-end': '#22d3ee',
-      '--glow': 'rgba(59, 130, 246, 0.45)',
-    },
-  },
-  {
-    key: 'royal',
-    name: 'Royal',
-    description: 'Deep indigo and violet — premium and confident.',
-    swatch: 'linear-gradient(135deg, #4f46e5, #a855f7)',
-    light: {
-      '--background': '#f8f7fd',
-      '--foreground': '#181229',
-      '--primary': '#4f46e5',
-      '--primary-foreground': '#ffffff',
-      '--secondary': '#ede9fe',
-      '--secondary-foreground': '#3b0764',
-      '--accent': '#a855f7',
-      '--accent-foreground': '#ffffff',
-      '--card': '#ffffff',
-      '--card-foreground': '#181229',
-      '--border': '#e5e1f5',
-      '--muted': '#f1eefb',
-      '--muted-foreground': '#655e7d',
-      '--gradient-start': '#4f46e5',
-      '--gradient-end': '#a855f7',
-      '--glow': 'rgba(79, 70, 229, 0.35)',
-    },
-    dark: {
-      '--background': '#0b0817',
-      '--foreground': '#ece9f9',
-      '--primary': '#818cf8',
-      '--primary-foreground': '#0b0817',
-      '--secondary': '#1c1533',
-      '--secondary-foreground': '#d7c9f7',
-      '--accent': '#c084fc',
-      '--accent-foreground': '#170a26',
-      '--card': '#130f24',
-      '--card-foreground': '#ece9f9',
-      '--border': '#241c3d',
-      '--muted': '#171129',
-      '--muted-foreground': '#9c92b8',
-      '--gradient-start': '#818cf8',
-      '--gradient-end': '#c084fc',
-      '--glow': 'rgba(129, 140, 248, 0.45)',
-    },
-  },
-  {
-    key: 'emerald',
-    name: 'Emerald',
-    description: 'Grounded greens with a teal edge — fresh and precise.',
-    swatch: 'linear-gradient(135deg, #059669, #14b8a6)',
-    light: {
-      '--background': '#f6faf8',
-      '--foreground': '#0e1f19',
-      '--primary': '#059669',
-      '--primary-foreground': '#ffffff',
-      '--secondary': '#d1fae5',
-      '--secondary-foreground': '#065f46',
-      '--accent': '#14b8a6',
-      '--accent-foreground': '#ffffff',
-      '--card': '#ffffff',
-      '--card-foreground': '#0e1f19',
-      '--border': '#dbeee6',
-      '--muted': '#eaf6f0',
-      '--muted-foreground': '#54695f',
-      '--gradient-start': '#059669',
-      '--gradient-end': '#14b8a6',
-      '--glow': 'rgba(5, 150, 105, 0.35)',
-    },
-    dark: {
-      '--background': '#061412',
-      '--foreground': '#e4f5ee',
-      '--primary': '#34d399',
-      '--primary-foreground': '#04140f',
-      '--secondary': '#0e2620',
-      '--secondary-foreground': '#a7ead2',
-      '--accent': '#2dd4bf',
-      '--accent-foreground': '#04201c',
-      '--card': '#0c1c18',
-      '--card-foreground': '#e4f5ee',
-      '--border': '#1a332b',
-      '--muted': '#0f221d',
-      '--muted-foreground': '#86a89b',
-      '--gradient-start': '#34d399',
-      '--gradient-end': '#2dd4bf',
-      '--glow': 'rgba(52, 211, 153, 0.4)',
-    },
-  },
-  {
-    key: 'sunset',
-    name: 'Sunset',
-    description: 'Warm orange into rose — energetic without being loud.',
-    swatch: 'linear-gradient(135deg, #ea580c, #e11d48)',
-    light: {
-      '--background': '#fef8f5',
-      '--foreground': '#241209',
-      '--primary': '#ea580c',
-      '--primary-foreground': '#ffffff',
-      '--secondary': '#ffe4d5',
-      '--secondary-foreground': '#7c2d12',
-      '--accent': '#e11d48',
-      '--accent-foreground': '#ffffff',
-      '--card': '#ffffff',
-      '--card-foreground': '#241209',
-      '--border': '#f4e0d3',
-      '--muted': '#fbeee5',
-      '--muted-foreground': '#7a6357',
-      '--gradient-start': '#ea580c',
-      '--gradient-end': '#e11d48',
-      '--glow': 'rgba(234, 88, 12, 0.35)',
-    },
-    dark: {
-      '--background': '#150907',
-      '--foreground': '#fbe9e1',
-      '--primary': '#fb923c',
-      '--primary-foreground': '#180a03',
-      '--secondary': '#2c140c',
-      '--secondary-foreground': '#f7c7ac',
-      '--accent': '#fb7185',
-      '--accent-foreground': '#210810',
-      '--card': '#1c100b',
-      '--card-foreground': '#fbe9e1',
-      '--border': '#33201a',
-      '--muted': '#221310',
-      '--muted-foreground': '#b89a8d',
-      '--gradient-start': '#fb923c',
-      '--gradient-end': '#fb7185',
-      '--glow': 'rgba(251, 146, 60, 0.4)',
-    },
-  },
-  {
-    key: 'monochrome',
-    name: 'Monochrome',
-    description: 'Neutral grayscale with an ink accent — quiet and serious.',
-    swatch: 'linear-gradient(135deg, #27272a, #71717a)',
-    light: {
-      '--background': '#fafafa',
-      '--foreground': '#18181b',
-      '--primary': '#27272a',
-      '--primary-foreground': '#ffffff',
-      '--secondary': '#e4e4e7',
-      '--secondary-foreground': '#27272a',
-      '--accent': '#52525b',
-      '--accent-foreground': '#ffffff',
-      '--card': '#ffffff',
-      '--card-foreground': '#18181b',
-      '--border': '#e4e4e7',
-      '--muted': '#f1f1f2',
-      '--muted-foreground': '#5f5f66',
-      '--gradient-start': '#3f3f46',
-      '--gradient-end': '#a1a1aa',
-      '--glow': 'rgba(39, 39, 42, 0.25)',
-    },
-    dark: {
-      '--background': '#0a0a0b',
-      '--foreground': '#f4f4f5',
-      '--primary': '#d4d4d8',
-      '--primary-foreground': '#0a0a0b',
-      '--secondary': '#1f1f23',
-      '--secondary-foreground': '#e4e4e7',
-      '--accent': '#a1a1aa',
-      '--accent-foreground': '#0a0a0b',
-      '--card': '#141416',
-      '--card-foreground': '#f4f4f5',
-      '--border': '#26262a',
-      '--muted': '#19191c',
-      '--muted-foreground': '#9a9aa1',
-      '--gradient-start': '#a1a1aa',
-      '--gradient-end': '#e4e4e7',
-      '--glow': 'rgba(212, 212, 216, 0.3)',
-    },
-  },
-  {
-    key: 'cyber',
-    name: 'Cyber',
-    description: 'Electric violet and cyan on near-black — futuristic tech.',
-    swatch: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
-    light: {
-      '--background': '#f7f7fc',
-      '--foreground': '#12101f',
-      '--primary': '#7c3aed',
-      '--primary-foreground': '#ffffff',
-      '--secondary': '#e0e7ff',
-      '--secondary-foreground': '#312e81',
-      '--accent': '#06b6d4',
-      '--accent-foreground': '#ffffff',
-      '--card': '#ffffff',
-      '--card-foreground': '#12101f',
-      '--border': '#e3e1f2',
-      '--muted': '#eeedf9',
-      '--muted-foreground': '#615d78',
-      '--gradient-start': '#7c3aed',
-      '--gradient-end': '#06b6d4',
-      '--glow': 'rgba(124, 58, 237, 0.4)',
-    },
-    dark: {
-      '--background': '#05050a',
-      '--foreground': '#e9e8fb',
-      '--primary': '#a78bfa',
-      '--primary-foreground': '#07050f',
-      '--secondary': '#160f2e',
-      '--secondary-foreground': '#cabdfa',
-      '--accent': '#22d3ee',
-      '--accent-foreground': '#031015',
-      '--card': '#0c0a17',
-      '--card-foreground': '#e9e8fb',
-      '--border': '#211a3a',
-      '--muted': '#100b21',
-      '--muted-foreground': '#948eb8',
-      '--gradient-start': '#a78bfa',
-      '--gradient-end': '#22d3ee',
-      '--glow': 'rgba(167, 139, 250, 0.5)',
-    },
-  },
+  preset(
+    'signal',
+    'Signal',
+    'Ink and electric lime — the default.',
+    { background: '#0A0A0B', surface: '#111113', raised: '#18181B', accent: '#C6FF3D' },
+    { background: '#F4F2EE', surface: '#EDEAE4', raised: '#E4E1DA', accent: '#3F5900' },
+  ),
+  preset(
+    'ocean',
+    'Ocean',
+    'Deep navy ink with a cool cyan signal.',
+    { background: '#07090C', surface: '#0E1217', raised: '#151B22', accent: '#5CC8FF' },
+    { background: '#F1F4F6', surface: '#E8ECEF', raised: '#DDE3E8', accent: '#0B5E8E' },
+  ),
+  preset(
+    'royal',
+    'Royal',
+    'Violet ink, lavender signal.',
+    { background: '#0A090D', surface: '#121017', raised: '#1A1721', accent: '#B69CFF' },
+    { background: '#F3F1F6', surface: '#EAE7EF', raised: '#E0DCE8', accent: '#5B3FC4' },
+  ),
+  preset(
+    'emerald',
+    'Emerald',
+    'Forest ink, mint signal.',
+    { background: '#070B09', surface: '#0E1411', raised: '#151D19', accent: '#4BE3A5' },
+    { background: '#F0F4F1', surface: '#E6ECE8', raised: '#DBE3DE', accent: '#0B6B47' },
+  ),
+  preset(
+    'sunset',
+    'Sunset',
+    'Warm ink, ember signal.',
+    { background: '#0C0908', surface: '#15100E', raised: '#1E1714', accent: '#FF9A5A' },
+    { background: '#F6F1EC', surface: '#EEE7E0', raised: '#E5DCD3', accent: '#A33E0B' },
+  ),
+  preset(
+    'monochrome',
+    'Monochrome',
+    'No hue at all — pure contrast.',
+    { background: '#0A0A0A', surface: '#121212', raised: '#1A1A1A', accent: '#F5F5F5' },
+    { background: '#F4F4F2', surface: '#EAEAE7', raised: '#DFDFDB', accent: '#0A0A0A' },
+  ),
+  preset(
+    'cyber',
+    'Cyber',
+    'Near-black with an aqua signal.',
+    { background: '#050608', surface: '#0C0F13', raised: '#13181E', accent: '#3DF5FF' },
+    { background: '#EFF4F5', surface: '#E4EBEC', raised: '#D8E1E3', accent: '#006A73' },
+  ),
 ];
 
-export const defaultThemePreset: ThemePreset['key'] = 'ocean';
+export const defaultThemePreset: ThemePresetKey = 'signal';
