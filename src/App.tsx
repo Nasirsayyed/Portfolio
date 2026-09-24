@@ -14,8 +14,8 @@ import { Chapter } from '@/components/ui/Chapter';
 import { Boot } from '@/components/boot/Boot';
 import { Preloader } from '@/components/boot/Preloader';
 import { About } from '@/components/about/About';
-import { ExperienceTimeline } from '@/components/experience/ExperienceTimeline';
-import { SkillsGrid } from '@/components/skills/SkillsGrid';
+import { Experience } from '@/components/experience/Experience';
+import { Stack } from '@/components/stack/Stack';
 import { ProjectsGrid } from '@/components/projects/ProjectsGrid';
 import { Achievements } from '@/components/achievements/Achievements';
 import { Education } from '@/components/education/Education';
@@ -62,10 +62,8 @@ export default function App() {
       <main id="main-content" className="overflow-x-clip">
         <Boot />
         <About />
-        <Chapter id="stack">
-          <SkillsGrid />
-        </Chapter>
-        <ExperienceTimeline />
+        <Stack />
+        <Experience />
         <Chapter id="work">
           <ProjectsGrid />
         </Chapter>

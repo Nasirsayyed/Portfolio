@@ -21,8 +21,10 @@ export const personalInfo: PersonalInfo = {
   timeZoneLabel: 'IST',
   summary:
     'Results-driven Full Stack .NET Developer with 4+ years of experience designing and delivering responsive web applications, SaaS products, microservices, and data visualization platforms. Proficient in C#, .NET Core 8, React.js 19, and SQL Server, with hands-on experience building products end-to-end — from user onboarding to payment gateway integration (Razorpay). Proven track record of automating workflows and building scalable solutions across logistics, healthcare, agriculture, and government domains.',
+  manifesto:
+    'I turn messy, real-world workflows into software people rely on every day — warehouse SaaS, disease heatmaps across 50+ countries, portals for 100+ case managers. I care about the unglamorous parts: data that stays in sync, reports nobody builds by hand, and interfaces that load fast.',
   about:
-    "I'm a full-stack .NET developer who has spent four-plus years turning messy, real-world workflows into software people rely on every day. Most recently I built LogiSKU, a warehouse-management SaaS, end to end — from sign-up and onboarding to Razorpay subscription billing. Before that I shipped seven production platforms at Techlore: real-time analytics dashboards, a disease heatmap spanning 50+ countries, an adoption portal for 100+ case managers and a government research platform over 10,000+ records. I work across C#, .NET Core 8, React.js 19 and SQL Server, and I care most about the unglamorous parts — data that stays in sync, reports nobody has to build by hand, and interfaces that load fast.",
+    'Most recently I built LogiSKU at Simulytics, a warehouse-management SaaS, end to end — from sign-up and onboarding to Razorpay subscription billing. Before that I spent four-plus years at Techlore shipping seven production platforms across analytics, healthcare, agriculture, logistics and ERP integration, mostly in C#, .NET Core, React and SQL Server.',
   valueProposition:
     'I build end-to-end SaaS products and data-heavy platforms with .NET and React — from onboarding and payments to real-time dashboards.',
   coreStack: ['C#', '.NET Core 8', 'React.js 19', 'SQL Server'],

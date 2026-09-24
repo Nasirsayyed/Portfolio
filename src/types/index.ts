@@ -20,6 +20,9 @@ export interface PersonalInfo {
   timeZoneLabel: string;
   summary: string;
   /** First-person editorial paragraph for the About chapter. */
+  /** Short first-person statement, revealed word by word in About. */
+  manifesto: string;
+  /** Supporting About paragraph: the concrete facts behind the manifesto. */
   about: string;
   valueProposition: string;
   /** Core technologies for the hero's mono role line. */

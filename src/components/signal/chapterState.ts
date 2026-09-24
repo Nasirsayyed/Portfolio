@@ -21,13 +21,37 @@ export interface SignalKeyframe {
 type KeyframeFn = (wide: boolean) => SignalKeyframe;
 
 const keyframes: Record<string, KeyframeFn> = {
-  boot: (wide) => ({ stage: 0, offsetX: wide ? 3.6 : 0.5, offsetY: wide ? 1 : 2.15, scale: wide ? 0.92 : 0.6, dim: 1 }),
-  about: (wide) => ({ stage: 0, offsetX: wide ? 5.2 : 1.8, offsetY: wide ? -0.6 : 2.6, scale: 0.7, dim: 0.45 }),
+  boot: (wide) => ({
+    stage: 0,
+    offsetX: wide ? 3.6 : 0.5,
+    offsetY: wide ? 1 : 2.15,
+    scale: wide ? 0.92 : 0.6,
+    dim: 1,
+  }),
+  about: (wide) => ({
+    stage: 0,
+    offsetX: wide ? 5.2 : 1.8,
+    offsetY: wide ? -0.6 : 2.6,
+    scale: 0.7,
+    dim: 0.45,
+  }),
   stack: () => ({ stage: 1, offsetX: 0, offsetY: 0, scale: 1, dim: 0.95 }),
-  experience: () => ({ stage: 2, offsetX: 0, offsetY: -1.2, scale: 1, dim: 0.6 }),
+  experience: () => ({
+    stage: 2,
+    offsetX: 0,
+    offsetY: -1.2,
+    scale: 1,
+    dim: 0.6,
+  }),
   work: () => ({ stage: 3, offsetX: 0, offsetY: 0, scale: 1, dim: 0.32 }),
   proof: () => ({ stage: 3, offsetX: 0, offsetY: 0, scale: 1.05, dim: 0.22 }),
-  connect: (wide) => ({ stage: 4, offsetX: wide ? 3.2 : 0, offsetY: wide ? 0 : -1.4, scale: 1, dim: 1 }),
+  connect: (wide) => ({
+    stage: 4,
+    offsetX: wide ? 3.2 : 0,
+    offsetY: wide ? 0 : -1.4,
+    scale: 1,
+    dim: 1,
+  }),
 };
 
 export interface SignalTarget extends SignalKeyframe {
@@ -35,7 +59,10 @@ export interface SignalTarget extends SignalKeyframe {
   travel: number;
 }
 
+/** Morph over the last 38% of a chapter… */
 const MORPH_START = 0.62;
+/** …but in long (pinned) chapters, only over roughly the final half-viewport, so the shape holds while pinned. */
+const MORPH_VIEWPORTS = 0.5;
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -51,7 +78,9 @@ let cacheFrame = 0;
 export function sampleSignalTarget(frame: number): SignalTarget {
   // Chapter elements rarely change; re-query about once a second.
   if (frame - cacheFrame > 60 || cachedChapters.length === 0) {
-    cachedChapters = Array.from(document.querySelectorAll<HTMLElement>('[data-chapter]'));
+    cachedChapters = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-chapter]"),
+    );
     cacheFrame = frame;
   }
   const wide = window.innerWidth >= 1024;
@@ -62,23 +91,39 @@ export function sampleSignalTarget(frame: number): SignalTarget {
   let index = 0;
   let local = 0;
   let travel = 0;
+  let height = 1;
   for (let i = 0; i < cachedChapters.length; i++) {
     const rect = cachedChapters[i]!.getBoundingClientRect();
     if (rect.top <= probe) {
       index = i;
-      local = rect.height > 0 ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height)) : 0;
+      local =
+        rect.height > 0
+          ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height))
+          : 0;
+      height = Math.max(1, rect.height);
     }
-    if (cachedChapters[i]!.dataset.chapter === 'experience') {
-      travel = rect.height > 0 ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height)) : 0;
+    if (cachedChapters[i]!.dataset.chapter === "experience") {
+      travel =
+        rect.height > 0
+          ? Math.min(1, Math.max(0, (probe - rect.top) / rect.height))
+          : 0;
     }
   }
 
-  const current = keyframes[cachedChapters[index]!.dataset.chapter ?? 'boot'] ?? keyframes.boot!;
+  const current =
+    keyframes[cachedChapters[index]!.dataset.chapter ?? "boot"] ??
+    keyframes.boot!;
   const nextEl = cachedChapters[index + 1];
-  const next = nextEl ? (keyframes[nextEl.dataset.chapter ?? ''] ?? current) : current;
+  const next = nextEl
+    ? (keyframes[nextEl.dataset.chapter ?? ""] ?? current)
+    : current;
   const a = current(wide);
   const b = next(wide);
-  const t = smooth(Math.min(1, Math.max(0, (local - MORPH_START) / (1 - MORPH_START))));
+  const start = Math.max(
+    MORPH_START,
+    1 - (window.innerHeight * MORPH_VIEWPORTS) / height,
+  );
+  const t = smooth(Math.min(1, Math.max(0, (local - start) / (1 - start))));
 
   return {
     stage: lerp(a.stage, b.stage, t),
