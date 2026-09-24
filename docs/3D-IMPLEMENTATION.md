@@ -1,5 +1,7 @@
 # 3D Portfolio — Implementation Notes
 
+> **Historical.** This describes the v2 3D branch. On `claude/portfolio-v3` it is superseded by **[V3-DESIGN.md](V3-DESIGN.md)**; `Scene3D`, `HeroMedallion`, `SkillSphere`, `TiltCard` and `Reveal3D` no longer exist here.
+
 **Branch:** `claude/portfolio-3d` (branched from `claude/premium-dev-portfolio-i0jzge`)
 **Live (current 2D site):** https://nasirahmedsayyed.vercel.app/
 

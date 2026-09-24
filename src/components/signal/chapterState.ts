@@ -30,9 +30,10 @@ const keyframes: Record<string, KeyframeFn> = {
   }),
   about: (wide) => ({
     stage: 0,
-    offsetX: wide ? 5.2 : 1.8,
-    offsetY: wide ? -0.6 : 2.6,
-    scale: 0.7,
+    // Phones: low and to the side, clear of the manifesto.
+    offsetX: wide ? 5.2 : 1.7,
+    offsetY: wide ? -0.6 : -2.9,
+    scale: wide ? 0.7 : 0.5,
     dim: 0.45,
   }),
   stack: () => ({ stage: 1, offsetX: 0, offsetY: 0, scale: 1, dim: 0.95 }),
@@ -45,13 +46,13 @@ const keyframes: Record<string, KeyframeFn> = {
   }),
   work: () => ({ stage: 3, offsetX: 0, offsetY: 0, scale: 1, dim: 0.32 }),
   proof: () => ({ stage: 3, offsetX: 0, offsetY: 0, scale: 1.05, dim: 0.22 }),
-  // On phones the pulse drops below the copy so it never sits behind text.
+  // On phones the pulse tucks behind the large heading, clear of the buttons and body copy.
   connect: (wide) => ({
     stage: 4,
-    offsetX: wide ? 3.2 : 0.4,
-    offsetY: wide ? 0 : -2.7,
-    scale: wide ? 1 : 0.7,
-    dim: wide ? 1 : 0.75,
+    offsetX: wide ? 3.2 : 1.3,
+    offsetY: wide ? 0 : 2.3,
+    scale: wide ? 1 : 0.5,
+    dim: wide ? 1 : 0.6,
   }),
 };
 

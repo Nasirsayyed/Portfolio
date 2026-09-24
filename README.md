@@ -1,18 +1,21 @@
 # Nasirahmed Sayyed — Portfolio
 
-**🔗 Live site: [nasirahmedsayyed.vercel.app](https://nasirahmedsayyed.vercel.app/)**
+**🔗 Live site: [nasirahmedsayyed.vercel.app](https://nasirahmedsayyed.vercel.app/)** (production branch)
 
-A premium, interactive developer portfolio built with React, TypeScript, Vite, Tailwind CSS, and Framer Motion. All content is sourced from `src/data/*.ts`, populated from the resume — nothing is fabricated.
+This branch, `claude/portfolio-v3`, is the **v3 "Signal" redesign**: a seven-chapter, scroll-driven portfolio with one persistent WebGL particle field behind the page. The field changes shape for each chapter, from a breathing core to an architecture diagram, a timeline helix, a grid and a pulse. All content is real DOM text read from `src/data/*.ts`, taken from the résumé. Recruiter Mode is a flat, fast résumé view with no WebGL.
+
+> Full design and engineering write-up: **[docs/V3-DESIGN.md](docs/V3-DESIGN.md)**
 
 ## Stack
 
-- React 18 + TypeScript (strict)
-- Vite
-- Tailwind CSS (semantic CSS-variable design tokens)
-- Framer Motion
-- three.js + React Three Fiber + drei (3D scenes, lazy-loaded)
-- Lucide React icons
+- React 18 + TypeScript (strict) + Vite 5
+- Tailwind CSS on CSS-variable design tokens
+- three.js + React Three Fiber 8 + drei, with custom GLSL (lazy-loaded)
+- @react-three/postprocessing (bloom, chromatic aberration; desktop dark mode only)
+- Lenis smooth scrolling driven by the GSAP ticker, with ScrollTrigger (lazy-loaded)
+- Framer Motion via `LazyMotion strict` (shared-element case studies, drawers, dialogs)
 - Zustand (+ `persist`) for theme and Recruiter Mode state
+- Instrument Serif, Geist Sans and Geist Mono, self-hosted via Fontsource
 
 ## Getting Started
 
@@ -28,60 +31,66 @@ Open http://localhost:5173.
 ```bash
 npm run build   # type-checks then builds to dist/
 npm run preview # preview the production build locally
+npm run lint
 ```
+
+## The Seven Chapters
+
+| # | Chapter | Highlights |
+|---|---|---|
+| 01 | Boot | Real-progress preloader (000→100), character-masked name, decoding stack line, magnetic CTAs |
+| 02 | About | Pinned word-by-word manifesto, duotone portrait, count-up stats |
+| 03 | Stack | Client / API / Data bands aligned to the field's architecture planes; hover or filter to light a layer |
+| 04 | Experience | Pinned horizontal timeline on desktop (vertical on phones), riding a particle helix |
+| 05 | Work | Editorial index with a pointer-following cover; full-screen shared-element case studies |
+| 06 | Proof | Bento of spotlight tiles with headline figures, education and certifications |
+| 07 | Connect | Copy-email, magnetic socials, contact form in a side drawer; footer with live IST clock |
 
 ## Project Structure
 
 ```
 src/
-  assets/         static assets, incl. the profile photo (assets/images/profile.jpg / .webp)
-  components/     feature-organized components (layout, hero, about, experience, ...)
-  data/           centralized, typed content — portfolio.ts, experience.ts, projects.ts, themePresets.ts
-  hooks/          reusable hooks (scroll spy, count-up, reduced motion, ...)
+  components/
+    boot/         preloader, hero
+    signal/       the WebGL field: shapes, GLSL, scroll→shape mapping, post-processing
+    about/ stack/ experience/ work/ proof/ connect/   one folder per chapter
+    layout/       top bar, chapter nav, mobile menu, footer, grain/vignette
+    cursor/ ui/   custom cursor, magnetic wrapper, chapter shell, drawer, modal
+    command-palette/ terminal/ theme/
+  motion/         lazy motion engine (Lenis + GSAP), Lenis handle, framer features
+  data/           all content + theme presets
+  hooks/          reduced motion, sticky progress, scramble, idle gate, focus trap, ...
   store/          Zustand stores (theme + UI state)
-  types/          shared TypeScript interfaces
-  utils/          small pure helpers (scroll, contact form, theme application)
+  types/ utils/
 ```
 
 ## Content
 
-Edit `src/data/portfolio.ts`, `src/data/experience.ts`, and `src/data/projects.ts` to update copy — every section reads from these files, nothing is hardcoded into JSX.
+Edit the files in `src/data/` to change copy. Nothing is hardcoded into JSX. `portfolio.ts` holds the profile, manifesto, stats, skills (each tagged with its Stack layer), achievements, education and socials. `experience.ts` holds the roles. `projects.ts` holds the case studies (problem, approach, result, headline metric).
 
 ### Profile photo
 
-`src/components/hero/ProfileImage.tsx` renders `src/assets/images/profile.jpg` (with a `profile.webp` served first via `<picture>`) inside the gradient frame/glow wrapper, `object-cover`/`object-top` so the headshot crops sensibly at any size. To swap the photo, replace both files (keeping the same names) — resize to ~900px on the long edge first to keep the bundle lean; a JPEG quality of ~85–90 and WebP quality of ~85 is a good balance of size vs. quality for a headshot.
+`src/assets/images/profile.jpg` + `profile.webp` (served first via `<picture>`) appear in About as a duotone portrait that turns full colour on hover. To swap it, replace both files under the same names, at about 900 px on the long edge.
 
 ### Resume
 
-`public/resume.pdf` is the actual uploaded resume and is what the "Download Resume" buttons link to. Replace this file to update it.
+`public/resume.pdf` is what every "Résumé" button downloads. Replace it to update.
 
 ## Theme System
 
-Six full presets (Ocean, Royal, Emerald, Sunset, Monochrome, Cyber) each define semantic CSS variables (`--background`, `--primary`, `--card`, `--gradient-start`, ...) for light and dark mode. Components consume only the variables via Tailwind's `bg-primary`, `text-foreground`, etc. — never a hardcoded hex — so switching preset, appearance (light/dark/system), border radius, animation level, or font size is a single DOM write in `src/utils/applyTheme.ts`. Settings persist to `localStorage` and are restored before paint via the inline script in `index.html` to avoid a flash of incorrect theme.
-
-## 3D Experience
-
-> Full write-up — architecture, performance numbers, fallbacks, bugs fixed and extension guide: **[docs/3D-IMPLEMENTATION.md](docs/3D-IMPLEMENTATION.md)**
-
-The site is built in two layers of 3D:
-
-- **WebGL (`src/components/three/`)** — `Scene3D` is a fixed full-page canvas behind all content: floating geometry, a particle field and lighting, with a camera that descends through the world as you scroll and drifts with the pointer. `HeroMedallion` puts the profile photo on a 3D medallion with orbiting tech rings that tilts toward the pointer and turns away as you scroll past. Both read the active theme's CSS variables (`useThemeColors`), so switching preset or light/dark recolours the 3D world live.
-- **CSS 3D (no WebGL)** — `TiltCard` rotates cards toward the pointer; children marked `.depth-1/2/3` sit at different Z depths and separate on hover. `Reveal3D` swings content in on a hinge, `SkillSphere` projects every skill onto a draggable rotating sphere, and project covers are glass cubes that turn over on hover.
-
-Performance and fallbacks:
-
-- three.js (~220 kB gzipped) is only reachable through `React.lazy` imports, so it loads after first paint and never blocks the page; the hero shows the flat photo until it arrives.
-- The hero canvas stops rendering when scrolled out of view, the skill sphere pauses offscreen, and `PerformanceMonitor` lowers resolution and particle count on slow devices.
-- **Reduced motion** keeps the scenes but renders them static; tilt is disabled on touch devices.
-- **Recruiter Mode** and browsers without WebGL get the flat 2D site (a `WebGLBoundary` also catches runtime context failures).
+The default preset is **Signal**: ink `#0A0A0B` with a lime `#C6FF3D` accent, or paper with olive in light mode. The six v2 presets (Ocean, Royal, Emerald, Sunset, Monochrome, Cyber) are generated from the same token recipe. Light / dark / system, radius and motion level are all adjustable in the theme drawer. Settings persist and are applied before first paint by the inline script in `index.html`. The WebGL field reads the active colours live, so switching theme recolours the particles.
 
 ## Recruiter Mode
 
-The toggle in the navbar (and command palette) switches the whole site into a concise, HR-focused view: the nav's quick-jump list narrows to Experience → Skills → Projects → Resume → Contact, the About and Highlights sections are hidden, all WebGL scenes are removed in favour of the flat 2D layout (skills become a scannable grid instead of the sphere), and all animation throughout the site is forced to its reduced form — the same code path used for `prefers-reduced-motion`.
+The toggle in the top bar, the hero and the command palette switches to a flat, fast résumé view. There's no WebGL, smooth scrolling, intro or pinning, and every animation is stopped. The résumé download stays visible at every screen size and becomes the hero's primary action. It uses the same code path as `prefers-reduced-motion`.
 
 ## Command Palette
 
-`Cmd/Ctrl + K` opens a searchable command list for navigation, resume download, dark mode toggle, opening the theme customizer, toggling Recruiter Mode, and opening the developer terminal easter egg (also reachable via the floating terminal button).
+`Cmd/Ctrl + K` opens a searchable list: jump to any chapter, download the résumé, toggle dark mode or Recruiter Mode, open the theme drawer, open the contact form, or open the developer terminal easter egg (also linked from the footer).
+
+## Performance
+
+Entry JS is 94 kB gzip. three.js, GSAP and Lenis load only after first paint, fonts and an idle moment. Lighthouse on the production build scores 94 (mobile) and 100 (desktop) for performance, with LCP 2.3 s / 0.5 s on the hero name and CLS 0. Browsers with only software WebGL get a static gradient in place of the field. See [docs/V3-DESIGN.md](docs/V3-DESIGN.md#7-performance) for the breakdown.
 
 ## Deployment
 
