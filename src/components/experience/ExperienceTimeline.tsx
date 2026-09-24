@@ -4,7 +4,7 @@ import { ExperienceCard } from '@/components/experience/ExperienceCard';
 
 export function ExperienceTimeline() {
   return (
-    <section id="experience" className="scroll-mt-24 py-20 sm:py-28">
+    <section id="experience" data-chapter="experience" className="scroll-mt-24 py-20 sm:py-28">
       <div className="container">
         <SectionHeading
           eyebrow="Career Journey"

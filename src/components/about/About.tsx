@@ -8,7 +8,7 @@ export function About() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="about" className="scroll-mt-24 py-20 sm:py-28">
+    <section id="about" data-chapter="about" className="scroll-mt-24 py-20 sm:py-28">
       <div className="container">
         <SectionHeading
           eyebrow="About Me"
