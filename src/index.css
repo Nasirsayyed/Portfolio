@@ -94,6 +94,35 @@ body {
     background-size: 26px 26px;
   }
 
+  /* --- 3D --- */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  /* Layers that float above a TiltCard's face and parallax against it. */
+  .depth-1 {
+    transform: translateZ(20px);
+  }
+  .depth-2 {
+    transform: translateZ(40px);
+  }
+  .depth-3 {
+    transform: translateZ(64px);
+  }
+  /* Stacked shadows read as an extruded, slightly lifted headline. */
+  .text-3d {
+    text-shadow:
+      0 1px 0 color-mix(in srgb, var(--primary) 22%, transparent),
+      0 2px 0 color-mix(in srgb, var(--primary) 16%, transparent),
+      0 3px 0 color-mix(in srgb, var(--primary) 10%, transparent),
+      0 14px 28px color-mix(in srgb, var(--foreground) 14%, transparent);
+  }
+  .text-3d-glow {
+    filter: drop-shadow(0 8px 22px var(--glow));
+  }
+
   .focus-ring {
     outline: none;
   }

@@ -1,14 +1,31 @@
-import { motion } from 'framer-motion';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Mail, MapPin, Phone, type LucideIcon } from 'lucide-react';
 import { personalInfo } from '@/data/portfolio';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SocialIcon } from '@/components/ui/SocialIcon';
+import { Reveal3D } from '@/components/ui/Reveal3D';
+import { TiltCard } from '@/components/ui/TiltCard';
 import { ContactForm } from '@/components/contact/ContactForm';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+
+function ContactTile({ icon: Icon, label, children }: { icon: LucideIcon; label: string; children: ReactNode }) {
+  return (
+    <>
+      <span className="depth-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gradient-brand text-primary-foreground shadow-glow">
+        <Icon className="h-5 w-5" aria-hidden="true" />
+      </span>
+      <div className="depth-1 min-w-0">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="truncate text-sm font-semibold text-foreground">{children}</p>
+      </div>
+    </>
+  );
+}
+
+const tileClass =
+  'rounded-xl border border-border bg-card shadow-card transition-[border-color,box-shadow] duration-300 hover:border-primary/40 hover:shadow-glow';
+const tileInner = 'focus-ring preserve-3d flex items-center gap-4 rounded-xl p-5';
 
 export function Contact() {
-  const reduceMotion = useReducedMotion();
-
   return (
     <section id="contact" className="scroll-mt-24 py-20 sm:py-28">
       <div className="container">
@@ -19,48 +36,30 @@ export function Contact() {
         />
 
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, x: -20 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col gap-4"
-          >
-            <a
-              href={`mailto:${personalInfo.email}`}
-              className="focus-ring flex items-center gap-4 rounded-xl border border-border bg-card p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-glow"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gradient-brand text-primary-foreground">
-                <Mail className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
-                <p className="text-sm font-semibold text-foreground">{personalInfo.email}</p>
-              </div>
-            </a>
+          <Reveal3D from="left" className="flex flex-col gap-4">
+            <TiltCard maxTilt={12} className={tileClass}>
+              <a href={`mailto:${personalInfo.email}`} className={tileInner}>
+                <ContactTile icon={Mail} label="Email">
+                  {personalInfo.email}
+                </ContactTile>
+              </a>
+            </TiltCard>
 
-            <a
-              href={`tel:${personalInfo.phone}`}
-              className="focus-ring flex items-center gap-4 rounded-xl border border-border bg-card p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-glow"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gradient-brand text-primary-foreground">
-                <Phone className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Phone</p>
-                <p className="text-sm font-semibold text-foreground">{personalInfo.phone}</p>
-              </div>
-            </a>
+            <TiltCard maxTilt={12} className={tileClass}>
+              <a href={`tel:${personalInfo.phone}`} className={tileInner}>
+                <ContactTile icon={Phone} label="Phone">
+                  {personalInfo.phone}
+                </ContactTile>
+              </a>
+            </TiltCard>
 
-            <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-5 shadow-card">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gradient-brand text-primary-foreground">
-                <MapPin className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Location</p>
-                <p className="text-sm font-semibold text-foreground">{personalInfo.location}</p>
+            <TiltCard maxTilt={12} className={tileClass}>
+              <div className={tileInner}>
+                <ContactTile icon={MapPin} label="Location">
+                  {personalInfo.location}
+                </ContactTile>
               </div>
-            </div>
+            </TiltCard>
 
             <div className="flex gap-3 pt-2">
               {personalInfo.socials
@@ -72,23 +71,20 @@ export function Contact() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={social.label}
-                    className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-primary/50 hover:text-primary"
+                    className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition hover:border-primary/50 hover:text-primary"
                   >
                     <SocialIcon icon={social.icon} />
                   </a>
                 ))}
             </div>
-          </motion.div>
+          </Reveal3D>
 
-          <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, x: 20 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.1 }}
-            className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
-          >
-            <ContactForm />
-          </motion.div>
+          {/* The form swings in but doesn't tilt — a moving target is miserable to type into. */}
+          <Reveal3D from="right" delay={0.1}>
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
+              <ContactForm />
+            </div>
+          </Reveal3D>
         </div>
       </div>
     </section>

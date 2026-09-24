@@ -13,7 +13,9 @@ export function ProjectModal() {
     <Modal open={project !== null} onClose={() => setActiveProjectId(null)} labelledBy="project-modal-title">
       {project ? (
         <div>
-          <ProjectCover project={project} />
+          <div className="group">
+            <ProjectCover project={project} size="modal" />
+          </div>
           <div className="p-6 sm:p-8">
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               {project.company} &middot; {project.period}

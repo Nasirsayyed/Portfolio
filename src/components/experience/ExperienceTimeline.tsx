@@ -21,9 +21,14 @@ export function ExperienceTimeline() {
             {experience.map((entry, index) => (
               <div key={entry.id} className="relative">
                 <span
-                  className={`absolute -left-8 top-8 hidden h-3 w-3 -translate-x-1/2 rounded-full border-2 sm:block ${
-                    entry.current ? 'border-primary bg-primary' : 'border-border bg-background'
+                  className={`absolute -left-8 top-8 hidden h-4 w-4 -translate-x-1/2 rounded-full sm:block ${
+                    entry.current ? 'shadow-glow' : 'opacity-70'
                   }`}
+                  style={{
+                    background: `radial-gradient(circle at 32% 30%, #fff 0%, ${
+                      entry.current ? 'var(--primary)' : 'var(--muted-foreground)'
+                    } 45%, color-mix(in srgb, var(--foreground) 60%, transparent) 100%)`,
+                  }}
                   aria-hidden="true"
                 />
                 <ExperienceCard entry={entry} index={index} />

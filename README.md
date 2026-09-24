@@ -10,6 +10,7 @@ A premium, interactive developer portfolio built with React, TypeScript, Vite, T
 - Vite
 - Tailwind CSS (semantic CSS-variable design tokens)
 - Framer Motion
+- three.js + React Three Fiber + drei (3D scenes, lazy-loaded)
 - Lucide React icons
 - Zustand (+ `persist`) for theme and Recruiter Mode state
 
@@ -58,9 +59,23 @@ Edit `src/data/portfolio.ts`, `src/data/experience.ts`, and `src/data/projects.t
 
 Six full presets (Ocean, Royal, Emerald, Sunset, Monochrome, Cyber) each define semantic CSS variables (`--background`, `--primary`, `--card`, `--gradient-start`, ...) for light and dark mode. Components consume only the variables via Tailwind's `bg-primary`, `text-foreground`, etc. — never a hardcoded hex — so switching preset, appearance (light/dark/system), border radius, animation level, or font size is a single DOM write in `src/utils/applyTheme.ts`. Settings persist to `localStorage` and are restored before paint via the inline script in `index.html` to avoid a flash of incorrect theme.
 
+## 3D Experience
+
+The site is built in two layers of 3D:
+
+- **WebGL (`src/components/three/`)** — `Scene3D` is a fixed full-page canvas behind all content: floating geometry, a particle field and lighting, with a camera that descends through the world as you scroll and drifts with the pointer. `HeroMedallion` puts the profile photo on a 3D medallion with orbiting tech rings that tilts toward the pointer and turns away as you scroll past. Both read the active theme's CSS variables (`useThemeColors`), so switching preset or light/dark recolours the 3D world live.
+- **CSS 3D (no WebGL)** — `TiltCard` rotates cards toward the pointer; children marked `.depth-1/2/3` sit at different Z depths and separate on hover. `Reveal3D` swings content in on a hinge, `SkillSphere` projects every skill onto a draggable rotating sphere, and project covers are glass cubes that turn over on hover.
+
+Performance and fallbacks:
+
+- three.js (~220 kB gzipped) is only reachable through `React.lazy` imports, so it loads after first paint and never blocks the page; the hero shows the flat photo until it arrives.
+- The hero canvas stops rendering when scrolled out of view, the skill sphere pauses offscreen, and `PerformanceMonitor` lowers resolution and particle count on slow devices.
+- **Reduced motion** keeps the scenes but renders them static; tilt is disabled on touch devices.
+- **Recruiter Mode** and browsers without WebGL get the flat 2D site (a `WebGLBoundary` also catches runtime context failures).
+
 ## Recruiter Mode
 
-The toggle in the navbar (and command palette) switches the whole site into a concise, HR-focused view: the nav's quick-jump list narrows to Experience → Skills → Projects → Resume → Contact, the About and Highlights sections are hidden, decorative hero animation/orbits are removed, and all Framer Motion animation throughout the site is forced to its reduced form — the same code path used for `prefers-reduced-motion`.
+The toggle in the navbar (and command palette) switches the whole site into a concise, HR-focused view: the nav's quick-jump list narrows to Experience → Skills → Projects → Resume → Contact, the About and Highlights sections are hidden, all WebGL scenes are removed in favour of the flat 2D layout (skills become a scannable grid instead of the sphere), and all animation throughout the site is forced to its reduced form — the same code path used for `prefers-reduced-motion`.
 
 ## Command Palette
 

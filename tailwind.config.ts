@@ -82,6 +82,10 @@ export default {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
         },
+        'spin-cube': {
+          from: { transform: 'rotateX(-24deg) rotateY(0deg)' },
+          to: { transform: 'rotateX(-24deg) rotateY(360deg)' },
+        },
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -89,6 +93,7 @@ export default {
         'spin-slow-reverse': 'spin-slow-reverse 22s linear infinite',
         blob: 'blob 12s ease-in-out infinite',
         marquee: 'marquee 28s linear infinite',
+        'spin-cube': 'spin-cube 6s linear infinite',
       },
     },
   },

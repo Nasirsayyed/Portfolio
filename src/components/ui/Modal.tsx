@@ -53,10 +53,11 @@ export function Modal({ open, onClose, children, labelledBy, className = '' }: M
             aria-modal="true"
             aria-labelledby={labelledBy}
             tabIndex={-1}
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 12 }}
-            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 12 }}
-            transition={{ duration: reduceMotion ? 0 : 0.25, ease: 'easeOut' }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92, rotateX: 22, y: 40 }}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, rotateX: 0, y: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94, rotateX: -14, y: 20 }}
+            style={{ transformPerspective: 1200, transformOrigin: 'center bottom' }}
+            transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
             className={`relative z-10 max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-card text-card-foreground shadow-2xl focus-ring ${className}`}
           >
             <button

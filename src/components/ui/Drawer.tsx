@@ -44,9 +44,10 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="drawer-title"
-            initial={reduceMotion ? { opacity: 0 } : { x: '100%' }}
-            animate={reduceMotion ? { opacity: 1 } : { x: 0 }}
-            exit={reduceMotion ? { opacity: 0 } : { x: '100%' }}
+            initial={reduceMotion ? { opacity: 0 } : { x: '100%', rotateY: -28 }}
+            animate={reduceMotion ? { opacity: 1 } : { x: 0, rotateY: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { x: '100%', rotateY: -28 }}
+            style={{ transformPerspective: 1400, transformOrigin: 'right center' }}
             transition={{ duration: reduceMotion ? 0 : 0.32, ease: [0.32, 0.72, 0, 1] }}
             className="glass absolute right-0 top-0 flex h-full w-full max-w-md flex-col border-l border-border shadow-2xl"
           >

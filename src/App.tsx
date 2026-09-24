@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useApplyTheme } from '@/hooks/useApplyTheme';
+import { use3DEnabled } from '@/hooks/use3DEnabled';
 import { useThemeStore } from '@/store/themeStore';
+import { WebGLBoundary } from '@/components/three/WebGLBoundary';
 import { LoadingScreen } from '@/components/loading/LoadingScreen';
 import { Navbar } from '@/components/layout/Navbar';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
@@ -21,9 +23,13 @@ import { CommandPalette } from '@/components/command-palette/CommandPalette';
 import { DevTerminal } from '@/components/terminal/DevTerminal';
 import { FloatingTerminalButton } from '@/components/terminal/FloatingTerminalButton';
 
+// three.js + R3F live in a separate chunk so the page shell stays light.
+const Scene3D = lazy(() => import('@/components/three/Scene3D'));
+
 export default function App() {
   useApplyTheme();
   const recruiterMode = useThemeStore((s) => s.recruiterMode);
+  const enable3D = use3DEnabled();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,10 +41,21 @@ export default function App() {
     <>
       <AnimatePresence>{loading ? <LoadingScreen /> : null}</AnimatePresence>
 
+      {enable3D && (
+        <WebGLBoundary fallback={null}>
+          <Suspense fallback={null}>
+            <Scene3D />
+          </Suspense>
+        </WebGLBoundary>
+      )}
+
       <ScrollProgress />
       <Navbar />
 
-      <main id="main-content">
+      {/* overflow-x-clip: 3D reveals start rotated, and perspective can push their near
+          edge past the viewport before they swing in. clip (unlike hidden) doesn't
+          create a scroll container, so scroll anchoring and sticky UI keep working. */}
+      <main id="main-content" className="overflow-x-clip">
         <Hero />
         {!recruiterMode && <About />}
         <ExperienceTimeline />
