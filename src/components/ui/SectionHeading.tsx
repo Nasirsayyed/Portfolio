@@ -20,14 +20,14 @@ export function SectionHeading({ eyebrow, title, description, align = 'center' }
 
       const split = SplitText.create('[data-heading-title]', { type: 'words', mask: 'words', wordsClass: 'split-word' });
 
-      gsap
+      const tl = gsap
         .timeline({ scrollTrigger: { trigger: rootRef.current, start: 'top 85%', toggleActions: 'play none none none' } })
         .from('[data-heading-eyebrow]', { y: 20, autoAlpha: 0, scale: 0.9, duration: 0.7 })
         .from(split.words, { yPercent: 115, rotate: 4, duration: 1.1, stagger: 0.07, ease: 'expo.out' }, '-=0.45')
-        .from('[data-heading-line]', { scaleX: 0, duration: 1, ease: 'expo.inOut' }, '-=0.9')
-        .from('[data-heading-desc]', { y: 24, autoAlpha: 0, duration: 0.9 }, '-=0.8');
+        .from('[data-heading-line]', { scaleX: 0, duration: 1, ease: 'expo.inOut' }, '-=0.9');
+      if (description) tl.from('[data-heading-desc]', { y: 24, autoAlpha: 0, duration: 0.9 }, '-=0.8');
     },
-    { scope: rootRef, revertOnUpdate: true, dependencies: [reduceMotion, title] },
+    { scope: rootRef, revertOnUpdate: true, dependencies: [reduceMotion, title, description] },
   );
 
   return (

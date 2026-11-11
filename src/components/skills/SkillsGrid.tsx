@@ -5,6 +5,7 @@ import { Flip, gsap, useGSAP } from '@/lib/gsap';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SkillCard } from '@/components/skills/SkillCard';
 import { Marquee } from '@/components/motion/Marquee';
+import { SkillsGlobe } from '@/components/three/SkillsGlobe';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const categories: SkillCategory[] = [
@@ -17,6 +18,8 @@ const categories: SkillCategory[] = [
   'Tools',
   'Practices',
 ];
+
+const globeLabels = skills.map((s) => ({ text: s.name, group: s.category }));
 
 const half = Math.ceil(skills.length / 2);
 const marqueeTop = skills.slice(0, half).map((s) => s.name);
@@ -49,8 +52,10 @@ export function SkillsGrid() {
       ease: 'power3.inOut',
       absolute: true,
       stagger: 0.015,
-      onEnter: (els) => gsap.fromTo(els, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.5, delay: 0.2 }),
-      onLeave: (els) => gsap.to(els, { autoAlpha: 0, scale: 0.6, duration: 0.35 }),
+      onEnter: (els) =>
+        els.length > 0 &&
+        gsap.fromTo(els, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.5, delay: 0.2 }),
+      onLeave: (els) => els.length > 0 && gsap.to(els, { autoAlpha: 0, scale: 0.6, duration: 0.35 }),
     });
   }, [filter]);
 
@@ -87,7 +92,19 @@ export function SkillsGrid() {
       </div>
 
       <div className="container">
-        <div className="mb-10 flex flex-wrap justify-center gap-2" role="tablist" aria-label="Filter skills by category">
+        {!reduceMotion && (
+          <SkillsGlobe
+            labels={globeLabels}
+            activeGroup={filter === 'All' ? null : filter}
+            onSelect={(label) => changeFilter(label.group === filter ? 'All' : (label.group as SkillCategory))}
+          />
+        )}
+
+        <div
+          className="mb-10 flex flex-wrap justify-center gap-2"
+          role="tablist"
+          aria-label="Filter skills by category"
+        >
           {(['All', ...categories] as const).map((category) => (
             <button
               key={category}

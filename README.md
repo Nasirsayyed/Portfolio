@@ -2,7 +2,7 @@
 
 **🔗 Live site: [nasirahmedsayyed.vercel.app](https://nasirahmedsayyed.vercel.app/)**
 
-A premium, interactive developer portfolio built with React, TypeScript, Vite, Tailwind CSS, and GSAP. All content is sourced from `src/data/*.ts`, populated from the resume — nothing is fabricated.
+A premium, interactive developer portfolio built with React, TypeScript, Vite, Tailwind CSS, GSAP, and three.js. All content is sourced from `src/data/*.ts`, populated from the resume — nothing is fabricated.
 
 ## Stack
 
@@ -10,6 +10,7 @@ A premium, interactive developer portfolio built with React, TypeScript, Vite, T
 - Vite
 - Tailwind CSS (semantic CSS-variable design tokens)
 - GSAP (ScrollTrigger, SplitText, Flip) + `@gsap/react`
+- three.js (WebGL scenes, lazy-loaded in their own chunk)
 - Lenis (smooth scrolling, synced to GSAP's ticker)
 - Framer Motion (overlay mount/unmount only: modals, drawers, menus)
 - Lucide React icons
@@ -41,6 +42,8 @@ src/
   hooks/          reusable hooks (scroll spy, scroll reveal, tilt, reduced motion, ...)
   lib/            GSAP plugin registration and the shared Lenis instance
   components/motion/  smooth scroll, custom cursor, magnetic wrapper, marquee
+  components/three/   React wrappers that mount the WebGL scenes
+  three/          three.js scenes, shaders, and the useThreeScene loader hook
   store/          Zustand stores (theme + UI state)
   types/          shared TypeScript interfaces
   utils/          small pure helpers (scroll, contact form, theme application)
@@ -73,6 +76,16 @@ All page motion is GSAP-driven:
 - **Intro** — a loader timeline (initials, 0→100 counter, curtain wipe) hands off to a staggered hero reveal (SplitText characters, masked name, blurred copy, magnetic CTAs).
 - **Scroll** — Lenis inertial scrolling feeds ScrollTrigger; section titles reveal word-by-word, cards enter via `useScrollReveal` (`data-reveal="up|left|right|scale|clip|tilt"`), the About summary lights up word-by-word as it is scrubbed, the experience rail draws itself, and the hero parallaxes out.
 - **Interaction** — magnetic buttons, 3D tilt + glare on project cards, pointer-parallax portrait, a follower cursor (fine pointers only), a scroll-velocity-reactive skills marquee, Flip-animated skill filtering, and a navbar that hides on scroll down.
+
+## 3D (three.js)
+
+Three WebGL scenes, each loaded on demand via dynamic `import()` so three.js never blocks first paint:
+
+- **Hero particle field** (`three/scenes/heroField.ts`) — a shader-animated wave of ~10k particles; the pointer raises a hill beneath it, clicks send out a shockwave, and scrolling dives the camera into it.
+- **Portrait orb** (`three/scenes/portraitOrb.ts`) — a simplex-noise-displaced, fresnel-lit liquid orb behind the photo that leans toward the pointer, churns on hover and pulses on click.
+- **Skills globe** (`three/scenes/skillsGlobe.ts`) — drag-to-spin sphere of every skill with inertia; hovering highlights a skill and clicking it filters the grid to that category.
+
+`useThreeScene` handles lazy loading, sizing, rendering on GSAP's ticker (paused while off-screen), live theme colours, and GPU cleanup. Scenes are not mounted at all when motion is reduced, and fall back silently if WebGL is unavailable.
 
 Every effect is skipped when motion is reduced (OS setting, theme setting, or Recruiter Mode), leaving content in its final, fully visible state.
 

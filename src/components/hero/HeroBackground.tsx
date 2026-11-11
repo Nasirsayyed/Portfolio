@@ -3,6 +3,7 @@ import { gsap, useGSAP } from '@/lib/gsap';
 import { useFinePointer } from '@/hooks/useFinePointer';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useThemeStore } from '@/store/themeStore';
+import { HeroField } from '@/components/three/HeroField';
 
 export function HeroBackground() {
   const reduceMotion = useReducedMotion();
@@ -66,6 +67,8 @@ export function HeroBackground() {
         data-grid-layer
         className="dot-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,black,transparent)]"
       />
+
+      {!reduceMotion && <HeroField />}
 
       {!recruiterMode && (
         <div data-blob-layer className="absolute inset-0">

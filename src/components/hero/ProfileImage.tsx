@@ -4,6 +4,7 @@ import { gsap, useGSAP } from '@/lib/gsap';
 import { useFinePointer } from '@/hooks/useFinePointer';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useThemeStore } from '@/store/themeStore';
+import { PortraitOrb } from '@/components/three/PortraitOrb';
 import profileJpg from '@/assets/images/profile.jpg';
 import profileWebp from '@/assets/images/profile.webp';
 
@@ -69,6 +70,8 @@ export function ProfileImage() {
         className="absolute -inset-6 rounded-full bg-gradient-brand opacity-30 blur-3xl"
         aria-hidden="true"
       />
+
+      {!reduceMotion && <PortraitOrb />}
 
       {!recruiterMode && (
         <div data-depth="-16" className="absolute inset-0" aria-hidden="true">
