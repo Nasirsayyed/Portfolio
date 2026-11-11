@@ -1,13 +1,15 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { personalInfo } from '@/data/portfolio';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SocialIcon } from '@/components/ui/SocialIcon';
 import { ContactForm } from '@/components/contact/ContactForm';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { Magnetic } from '@/components/motion/Magnetic';
 
 export function Contact() {
-  const reduceMotion = useReducedMotion();
+  const gridRef = useRef<HTMLDivElement>(null);
+  useScrollReveal(gridRef);
 
   return (
     <section id="contact" className="scroll-mt-24 py-20 sm:py-28">
@@ -18,14 +20,8 @@ export function Contact() {
           description="Open to new full-stack opportunities — reach out directly or send a message below."
         />
 
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, x: -20 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col gap-4"
-          >
+        <div ref={gridRef} className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div data-reveal="left" className="flex flex-col gap-4">
             <a
               href={`mailto:${personalInfo.email}`}
               className="focus-ring flex items-center gap-4 rounded-xl border border-border bg-card p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-glow"
@@ -66,29 +62,27 @@ export function Contact() {
               {personalInfo.socials
                 .filter((s) => s.icon === 'github' || s.icon === 'linkedin' || s.icon === 'code')
                 .map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={social.label}
-                    className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-primary/50 hover:text-primary"
-                  >
-                    <SocialIcon icon={social.icon} />
-                  </a>
+                  <Magnetic key={social.label} strength={0.5}>
+                    <a
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={social.label}
+                      className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                    >
+                      <SocialIcon icon={social.icon} />
+                    </a>
+                  </Magnetic>
                 ))}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, x: 20 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.1 }}
+          <div
+            data-reveal="right"
             className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
           >
             <ContactForm />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -2,14 +2,16 @@
 
 **🔗 Live site: [nasirahmedsayyed.vercel.app](https://nasirahmedsayyed.vercel.app/)**
 
-A premium, interactive developer portfolio built with React, TypeScript, Vite, Tailwind CSS, and Framer Motion. All content is sourced from `src/data/*.ts`, populated from the resume — nothing is fabricated.
+A premium, interactive developer portfolio built with React, TypeScript, Vite, Tailwind CSS, and GSAP. All content is sourced from `src/data/*.ts`, populated from the resume — nothing is fabricated.
 
 ## Stack
 
 - React 18 + TypeScript (strict)
 - Vite
 - Tailwind CSS (semantic CSS-variable design tokens)
-- Framer Motion
+- GSAP (ScrollTrigger, SplitText, Flip) + `@gsap/react`
+- Lenis (smooth scrolling, synced to GSAP's ticker)
+- Framer Motion (overlay mount/unmount only: modals, drawers, menus)
 - Lucide React icons
 - Zustand (+ `persist`) for theme and Recruiter Mode state
 
@@ -36,7 +38,9 @@ src/
   assets/         static assets, incl. the profile photo (assets/images/profile.jpg / .webp)
   components/     feature-organized components (layout, hero, about, experience, ...)
   data/           centralized, typed content — portfolio.ts, experience.ts, projects.ts, themePresets.ts
-  hooks/          reusable hooks (scroll spy, count-up, reduced motion, ...)
+  hooks/          reusable hooks (scroll spy, scroll reveal, tilt, reduced motion, ...)
+  lib/            GSAP plugin registration and the shared Lenis instance
+  components/motion/  smooth scroll, custom cursor, magnetic wrapper, marquee
   store/          Zustand stores (theme + UI state)
   types/          shared TypeScript interfaces
   utils/          small pure helpers (scroll, contact form, theme application)
@@ -60,7 +64,17 @@ Six full presets (Ocean, Royal, Emerald, Sunset, Monochrome, Cyber) each define 
 
 ## Recruiter Mode
 
-The toggle in the navbar (and command palette) switches the whole site into a concise, HR-focused view: the nav's quick-jump list narrows to Experience → Skills → Projects → Resume → Contact, the About and Highlights sections are hidden, decorative hero animation/orbits are removed, and all Framer Motion animation throughout the site is forced to its reduced form — the same code path used for `prefers-reduced-motion`.
+The toggle in the navbar (and command palette) switches the whole site into a concise, HR-focused view: the nav's quick-jump list narrows to Experience → Skills → Projects → Resume → Contact, the About and Highlights sections are hidden, decorative hero animation/orbits are removed, and all GSAP / Framer Motion animation (plus Lenis smooth scrolling and the custom cursor) throughout the site is forced to its reduced form — the same code path used for `prefers-reduced-motion`.
+
+## Motion
+
+All page motion is GSAP-driven:
+
+- **Intro** — a loader timeline (initials, 0→100 counter, curtain wipe) hands off to a staggered hero reveal (SplitText characters, masked name, blurred copy, magnetic CTAs).
+- **Scroll** — Lenis inertial scrolling feeds ScrollTrigger; section titles reveal word-by-word, cards enter via `useScrollReveal` (`data-reveal="up|left|right|scale|clip|tilt"`), the About summary lights up word-by-word as it is scrubbed, the experience rail draws itself, and the hero parallaxes out.
+- **Interaction** — magnetic buttons, 3D tilt + glare on project cards, pointer-parallax portrait, a follower cursor (fine pointers only), a scroll-velocity-reactive skills marquee, Flip-animated skill filtering, and a navbar that hides on scroll down.
+
+Every effect is skipped when motion is reduced (OS setting, theme setting, or Recruiter Mode), leaving content in its final, fully visible state.
 
 ## Command Palette
 

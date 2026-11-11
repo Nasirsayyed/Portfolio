@@ -36,6 +36,11 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Lenis drives scrolling itself — native smooth behaviour would fight it. */
+html.lenis {
+  scroll-behavior: auto !important;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -109,6 +114,85 @@ body {
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+}
+
+/* ---------- GSAP motion helpers ---------- */
+
+/* Off-screen start positions of scroll reveals must never widen the page.
+   Set on <main> rather than <body> so it isn't propagated to the viewport. */
+#main-content {
+  overflow-x: clip;
+}
+
+/* Pointer follower (only rendered on fine pointers with motion enabled). */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  pointer-events: none;
+  border-radius: 9999px;
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--primary);
+}
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid color-mix(in srgb, var(--primary) 70%, transparent);
+  transition: background-color 250ms ease, border-color 250ms ease;
+}
+.cursor-ring--active {
+  background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+  border-color: transparent;
+}
+
+/* SplitText masks: leave room for descenders so g / y / p aren't clipped. */
+.split-word-mask {
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+/* Ghosted display type used by the second skills-marquee row. */
+.text-ghost {
+  color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+/* Pointer-tracking glare on tilt cards (--gx / --gy set by useTilt). */
+.tilt-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, var(--primary) 16%, transparent), transparent 60%);
+  transition: opacity 300ms ease;
+}
+.tilt-card:hover::before {
+  opacity: 1;
+}
+
+/* Hero "scroll" cue: a light that travels down a hairline. */
+.scroll-cue::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -40%;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, var(--primary));
+  animation: scroll-cue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes scroll-cue {
+  to {
+    top: 100%;
   }
 }
 

@@ -1,6 +1,7 @@
 import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react';
 import { personalInfo } from '@/data/portfolio';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { scrollToTop } from '@/utils/scroll';
 
 export function Footer() {
   const reduceMotion = useReducedMotion();
@@ -46,7 +47,7 @@ export function Footer() {
 
         <button
           type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })}
+          onClick={() => scrollToTop(reduceMotion)}
           className="focus-ring flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium text-muted-foreground transition hover:border-primary/50 hover:text-foreground"
         >
           Back to top

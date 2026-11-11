@@ -1,24 +1,20 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
 import { Award, GraduationCap } from 'lucide-react';
 import { certifications, education } from '@/data/portfolio';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 export function Education() {
-  const reduceMotion = useReducedMotion();
+  const gridRef = useRef<HTMLDivElement>(null);
+  useScrollReveal(gridRef);
 
   return (
     <section id="education" className="scroll-mt-24 py-20 sm:py-28">
       <div className="container">
         <SectionHeading eyebrow="Background" title="Education & Certifications" />
 
-        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
-          <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5 }}
-          >
+        <div ref={gridRef} className="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
+          <div data-reveal="left">
             <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               <GraduationCap className="h-4 w-4" aria-hidden="true" />
               Education
@@ -40,14 +36,9 @@ export function Education() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.1 }}
-          >
+          <div data-reveal="right">
             <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               <Award className="h-4 w-4" aria-hidden="true" />
               Certifications
@@ -77,7 +68,7 @@ export function Education() {
                 );
               })}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

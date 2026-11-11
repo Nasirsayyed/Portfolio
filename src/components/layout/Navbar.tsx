@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Command, Download, Github, Linkedin, Menu, Settings2 } from 'lucide-react';
 import { personalInfo } from '@/data/portfolio';
 import { navItems, recruiterNavItems } from '@/data/navigation';
@@ -30,10 +31,44 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Slide the bar away while reading downward; bring it back on any upward scroll.
+  const headerRef = useRef<HTMLElement>(null);
+  const showHeader = () => gsap.to(headerRef.current, { yPercent: 0, duration: 0.45, ease: 'power3.out', overwrite: true });
+
+  useGSAP(
+    () => {
+      const header = headerRef.current;
+      if (reduceMotion || !header) return;
+      let hidden = false;
+      ScrollTrigger.create({
+        start: 0,
+        end: 'max',
+        onUpdate: (self) => {
+          const hide = self.direction === 1 && self.scroll() > 320 && !useUiStore.getState().mobileMenuOpen;
+          if (hide === hidden) return;
+          hidden = hide;
+          gsap.to(header, {
+            yPercent: hide ? -110 : 0,
+            duration: hide ? 0.35 : 0.45,
+            ease: hide ? 'power2.in' : 'power3.out',
+            overwrite: true,
+          });
+        },
+      });
+      return () => {
+        gsap.killTweensOf(header);
+        gsap.set(header, { clearProps: 'transform' });
+      };
+    },
+    { revertOnUpdate: true, dependencies: [reduceMotion] },
+  );
+
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        ref={headerRef}
+        onFocusCapture={showHeader}
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 ${
           scrolled ? 'glass border-b border-border shadow-card' : 'bg-transparent'
         }`}
       >

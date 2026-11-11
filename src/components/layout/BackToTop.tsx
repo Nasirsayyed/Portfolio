@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { scrollToTop } from '@/utils/scroll';
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -19,7 +20,7 @@ export function BackToTop() {
       {visible ? (
         <motion.button
           type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })}
+          onClick={() => scrollToTop(reduceMotion)}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 12 }}

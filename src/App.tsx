@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { useCallback, useState } from 'react';
 import { useApplyTheme } from '@/hooks/useApplyTheme';
+import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 import { useThemeStore } from '@/store/themeStore';
+import { useUiStore } from '@/store/uiStore';
+import { SmoothScroll } from '@/components/motion/SmoothScroll';
+import { CustomCursor } from '@/components/motion/CustomCursor';
 import { LoadingScreen } from '@/components/loading/LoadingScreen';
 import { Navbar } from '@/components/layout/Navbar';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
@@ -24,16 +27,20 @@ import { FloatingTerminalButton } from '@/components/terminal/FloatingTerminalBu
 export default function App() {
   useApplyTheme();
   const recruiterMode = useThemeStore((s) => s.recruiterMode);
+  const setIntroComplete = useUiStore((s) => s.setIntroComplete);
   const [loading, setLoading] = useState(true);
+  useLockBodyScroll(loading);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 900);
-    return () => window.clearTimeout(timer);
-  }, []);
+  const handleLoaded = useCallback(() => {
+    setLoading(false);
+    setIntroComplete(true);
+  }, [setIntroComplete]);
 
   return (
     <>
-      <AnimatePresence>{loading ? <LoadingScreen /> : null}</AnimatePresence>
+      <SmoothScroll />
+      <CustomCursor />
+      {loading ? <LoadingScreen onComplete={handleLoaded} /> : null}
 
       <ScrollProgress />
       <Navbar />

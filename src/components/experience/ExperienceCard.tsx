@@ -1,26 +1,18 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { ChevronDown, MapPin } from 'lucide-react';
 import type { ExperienceEntry } from '@/types';
 import { Badge } from '@/components/ui/Badge';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface ExperienceCardProps {
   entry: ExperienceEntry;
-  index: number;
 }
 
-export function ExperienceCard({ entry, index }: ExperienceCardProps) {
+export function ExperienceCard({ entry }: ExperienceCardProps) {
   const [expanded, setExpanded] = useState(entry.current);
-  const reduceMotion = useReducedMotion();
   const panelId = `experience-panel-${entry.id}`;
 
   return (
-    <motion.div
-      initial={reduceMotion ? undefined : { opacity: 0, y: 24 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.5, delay: reduceMotion ? 0 : index * 0.08 }}
+    <div
       className={`group relative rounded-xl border bg-card p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-glow sm:p-7 ${
         entry.current ? 'border-primary/40' : 'border-border hover:border-primary/30'
       }`}
@@ -87,6 +79,6 @@ export function ExperienceCard({ entry, index }: ExperienceCardProps) {
           </span>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
